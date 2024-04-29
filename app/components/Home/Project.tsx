@@ -1,3 +1,5 @@
+'use client'
+
 import GitHubIcon from '@/app/icons/GitHubIcon'
 import YouTubeIcon from '@/app/icons/YouTubeIcon'
 import { joinMembersString } from '@/lib/utils'
@@ -10,7 +12,7 @@ import 'react-photo-view/dist/react-photo-view.css'
 import 'react-multi-carousel/lib/styles.css'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { toast } from 'sonner'
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import Image from 'next/image'
 
 function Project(props: Readonly<ProjectInterface>) {
@@ -26,6 +28,16 @@ function Project(props: Readonly<ProjectInterface>) {
         images,
         hearts,
     } = props
+
+    const [projectURL, setProjectURL] = useState('')
+
+    useEffect(() => {
+        if (window !== undefined) {
+            setProjectURL(
+                `${window.location.origin}${window.location.pathname}#${id}`
+            )
+        }
+    }, [])
 
     return (
         <article
@@ -86,7 +98,7 @@ function Project(props: Readonly<ProjectInterface>) {
                     <HeartIcon className="w-[34px]" /> {hearts}
                 </div>
                 <CopyToClipboard
-                    text={`${window.location.origin}${window.location.pathname}#${id}`}
+                    text={projectURL}
                     onCopy={() => toast('Copied shareable link to clipboard.')}
                 >
                     <div className="flex cursor-pointer items-center gap-2">
