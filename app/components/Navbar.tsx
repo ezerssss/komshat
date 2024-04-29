@@ -14,14 +14,17 @@ function Navbar() {
     const pathname = usePathname()
 
     return (
-        <nav className="flex justify-between border-b-2 px-10 py-5">
-            <p className="font-bold">komshat</p>
+        <nav className="flex items-center justify-between border-b-2 border-gray-200 px-10 py-5">
+            <p className="text-lg font-bold">komshat</p>
             <ul className="flex gap-10">
                 {routes.map(({ href, title }) => (
                     <Link
                         key={href}
                         href={href}
-                        className={twMerge(href === pathname && 'underline')}
+                        className={twMerge(
+                            href === pathname ? 'underline' : 'text-gray-400',
+                            'text-sm'
+                        )}
                     >
                         {title}
                     </Link>
