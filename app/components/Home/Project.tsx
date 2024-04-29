@@ -1,8 +1,16 @@
 import GitHubIcon from '@/app/icons/GitHubIcon'
 import YouTubeIcon from '@/app/icons/YouTubeIcon'
 import { joinMembersString } from '@/lib/utils'
-import { HeartIcon } from 'lucide-react'
+import { HeartIcon, Share2Icon } from 'lucide-react'
 import ProjectInterface from '../../types/ProjectInterface'
+import Carousel from 'react-multi-carousel'
+import { carouselResponsive } from '@/app/constants/carousel'
+import { PhotoProvider, PhotoView } from 'react-photo-view'
+import 'react-photo-view/dist/react-photo-view.css'
+import 'react-multi-carousel/lib/styles.css'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { toast } from 'sonner'
+import { memo } from 'react'
 import Image from 'next/image'
 
 function Project(props: Readonly<ProjectInterface>) {
@@ -21,8 +29,8 @@ function Project(props: Readonly<ProjectInterface>) {
 
     return (
         <article
-            key={id}
-            className="my-6 max-w-[800px] overflow-hidden rounded-md border-[1px] border-[#E5E7EB] shadow-md"
+            id={id}
+            className="my-6 block max-w-[800px] rounded-md border-[1px] border-[#E5E7EB] shadow-md"
         >
             <section className="flex items-center gap-4 p-4">
                 <div className="h-10 w-10 overflow-hidden rounded-full bg-black">
@@ -35,10 +43,14 @@ function Project(props: Readonly<ProjectInterface>) {
                     </p>
                 </div>
             </section>
-            <div className="px-16">
+            <div className="px-6 sm:px-16">
                 <section className="mb-3.5 mt-9">
-                    <h3 className="mb-1.5 text-2xl font-semibold">{title}</h3>
-                    <p className="leading-7">{description}</p>
+                    <h3 className="mb-1.5 text-xl font-semibold sm:text-2xl">
+                        {title}
+                    </h3>
+                    <p className="text-pretty text-sm leading-7 sm:text-base">
+                        {description}
+                    </p>
                 </section>
                 <section className="mb-8 mt-3.5 flex gap-2">
                     <a href={github} target="_blank">
@@ -48,17 +60,43 @@ function Project(props: Readonly<ProjectInterface>) {
                         <YouTubeIcon className="w-[30px]" />
                     </a>
                 </section>
-                <section className="mb-3.5 mt-8 flex h-[400px] max-h-[500px] items-center justify-center gap-3.5 bg-red-200">
-                    {images.map((image) => (
-                        <p key={image}>Image</p>
-                    ))}
+                <section className="mb-3.5 mt-8">
+                    <PhotoProvider>
+                        <Carousel responsive={carouselResponsive}>
+                            {images.map((image, index) => (
+                                <PhotoView key={image + index} src={image}>
+                                    <div className="flex h-full cursor-pointer items-center justify-center shadow-md">
+                                        <Image
+                                            width="0"
+                                            height="0"
+                                            sizes="100vw"
+                                            className="h-auto w-auto object-contain"
+                                            alt={`${image}/${index}`}
+                                            src={image}
+                                        />
+                                    </div>
+                                </PhotoView>
+                            ))}
+                        </Carousel>
+                    </PhotoProvider>
                 </section>
             </div>
-            <div className="my-3.5 mb-6 mt-[34px] flex items-center gap-2 px-14">
-                <HeartIcon className="w-[34px]" /> {hearts}
+            <div className="my-3.5 mb-6 mt-[34px] flex items-center gap-10 px-6 text-sm sm:px-14 sm:text-base">
+                <div className="flex items-center gap-2">
+                    <HeartIcon className="w-[34px]" /> {hearts}
+                </div>
+                <CopyToClipboard
+                    text={`${window.location.origin}${window.location.pathname}#${id}`}
+                    onCopy={() => toast('Copied shareable link to clipboard.')}
+                >
+                    <div className="flex cursor-pointer items-center gap-2">
+                        <Share2Icon className="w-[34px]" />
+                        <p>Share</p>
+                    </div>
+                </CopyToClipboard>
             </div>
         </article>
     )
 }
 
-export default Project
+export default memo(Project)

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    --scroll-behavior: smooth !important;
+    scroll-behavior: smooth !important;
+}
+
 .marquee p {
     padding-left: 100%;
     animation: marquee 30s linear infinite;
