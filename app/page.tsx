@@ -16,7 +16,7 @@ export default function Home() {
                     <h1 className="text-4xl font-bold sm:text-5xl">
                         Weekly Hackathons
                     </h1>
-                    <div className="max-w-[520px]">
+                    <div className="max-w-[500px]">
                         <section className="mt-8">
                             <p className="mb-2 text-gray-400">
                                 This week&apos;s theme:
