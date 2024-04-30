@@ -37,7 +37,7 @@ function Project(props: Readonly<ProjectInterface>) {
                 `${window.location.origin}${window.location.pathname}#${id}`
             )
         }
-    }, [])
+    }, [id])
 
     return (
         <article
@@ -77,12 +77,12 @@ function Project(props: Readonly<ProjectInterface>) {
                         <Carousel responsive={carouselResponsive}>
                             {images.map((image, index) => (
                                 <PhotoView key={image + index} src={image}>
-                                    <div className="flex h-full cursor-pointer items-center justify-center shadow-md">
+                                    <div className="flex h-full cursor-pointer items-center justify-center">
                                         <Image
                                             width="0"
                                             height="0"
                                             sizes="100vw"
-                                            className="h-auto w-auto object-contain"
+                                            className="h-auto w-auto object-contain shadow-md"
                                             alt={`${image}/${index}`}
                                             src={image}
                                         />
