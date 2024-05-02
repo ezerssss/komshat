@@ -8,6 +8,7 @@ import { PacmanLoader } from 'react-spinners'
 
 interface PropsInterface {
     children: React.ReactNode
+    delay?: boolean
 }
 
 function ProtectedRouteWrapper(props: PropsInterface) {
@@ -16,13 +17,17 @@ function ProtectedRouteWrapper(props: PropsInterface) {
 
     useEffect(() => {
         return onAuthStateChanged(auth, async (user) => {
+            if (props.delay) {
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+            }
+
             setIsAuthenticated(!!user)
 
             if (!user) {
                 router.replace('/')
             }
         })
-    }, [router])
+    }, [router, props.delay])
 
     return isAuthenticated ? (
         <>{props.children}</>

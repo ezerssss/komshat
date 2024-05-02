@@ -2,8 +2,15 @@
 
 import GitHubIcon from '@/app/icons/GitHubIcon'
 import YouTubeIcon from '@/app/icons/YouTubeIcon'
-import { joinMembersToString } from '@/lib/utils'
-import { HeartIcon, Share2Icon } from 'lucide-react'
+import {
+    getHackathonIDFromLocal,
+    isProjectLiked,
+    joinMembersToString,
+    setProjectAsLiked,
+    setProjectAsUnliked,
+    toastError,
+} from '@/lib/utils'
+import { Heart, HeartIcon, Share2Icon } from 'lucide-react'
 import Carousel from 'react-multi-carousel'
 import { carouselResponsive } from '@/app/constants/carousel'
 import { PhotoProvider, PhotoView } from 'react-photo-view'
@@ -14,6 +21,8 @@ import { toast } from 'sonner'
 import { memo, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ProjectInterface } from '@/app/types/ProjectInterface'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { likeProject, unlikeProject } from '@/app/firebase/functions'
 
 function Project(props: Readonly<ProjectInterface>) {
     const {
@@ -27,9 +36,12 @@ function Project(props: Readonly<ProjectInterface>) {
         youtube,
         images,
         hearts,
+        hackathonID,
     } = props
 
     const [projectURL, setProjectURL] = useState('')
+    const [heartsState, setHeartsState] = useState(hearts)
+    const [isHearted, setIsHearted] = useState(isProjectLiked(projectID))
 
     useEffect(() => {
         if (window !== undefined) {
@@ -39,19 +51,55 @@ function Project(props: Readonly<ProjectInterface>) {
         }
     }, [projectID])
 
+    async function handleHeart() {
+        if (hackathonID !== getHackathonIDFromLocal()) {
+            toast.warning('Cannot like a project in a finished hackathon.')
+
+            return
+        }
+
+        if (isProjectLiked(projectID) || isHearted) {
+            setHeartsState(heartsState - 1)
+
+            try {
+                setIsHearted(false)
+                await unlikeProject({ projectID })
+                setProjectAsUnliked(projectID)
+            } catch (error) {
+                toastError(error)
+            }
+
+            return
+        }
+
+        setHeartsState(heartsState + 1)
+        setIsHearted(true)
+
+        try {
+            await likeProject({ projectID })
+
+            toast.info('Successfully liked a project.')
+
+            setProjectAsLiked(projectID)
+        } catch (error) {
+            toastError(error)
+        }
+    }
+
     return (
         <article
             id={projectID}
             className="my-6 block max-w-[800px] rounded-md border-[1px] border-[#E5E7EB] shadow-md"
         >
             <section className="flex items-center gap-4 p-4">
-                <div className="h-10 w-10 overflow-hidden rounded-full bg-black">
-                    {teamPicture}
-                </div>
+                <Avatar>
+                    <AvatarImage src={teamPicture} />
+                    <AvatarFallback>{teamName[0]}</AvatarFallback>
+                </Avatar>
                 <div>
                     <p className="text-sm text-gray-900">{teamName}</p>
                     <p className="text-xs text-gray-500">
-                        {joinMembersToString(members)}
+                        Members: {joinMembersToString(members)}
                     </p>
                 </div>
             </section>
@@ -75,16 +123,16 @@ function Project(props: Readonly<ProjectInterface>) {
                 <section className="mb-3.5 mt-8">
                     <PhotoProvider>
                         <Carousel responsive={carouselResponsive}>
-                            {images.map((image, index) => (
-                                <PhotoView key={image + index} src={image}>
+                            {images.map(({ url }, index) => (
+                                <PhotoView key={url} src={url}>
                                     <div className="flex h-full cursor-pointer items-center justify-center">
                                         <Image
                                             width="0"
                                             height="0"
                                             sizes="100vw"
                                             className="h-auto w-auto object-contain shadow-md"
-                                            alt={`${image}/${index}`}
-                                            src={image}
+                                            alt={`${url}/${index}`}
+                                            src={url}
                                         />
                                     </div>
                                 </PhotoView>
@@ -94,9 +142,16 @@ function Project(props: Readonly<ProjectInterface>) {
                 </section>
             </div>
             <div className="my-3.5 mb-6 mt-[34px] flex items-center gap-10 px-6 text-sm sm:px-14 sm:text-base">
-                <div className="flex items-center gap-2">
-                    <HeartIcon className="w-[34px]" /> {hearts}
-                </div>
+                <button
+                    className="flex items-center gap-2"
+                    onClick={() => handleHeart()}
+                >
+                    <Heart
+                        className="w-34"
+                        fill={isHearted ? 'red' : 'white'}
+                    />
+                    {heartsState}
+                </button>
                 <CopyToClipboard
                     text={projectURL}
                     onCopy={() =>

@@ -1,6 +1,6 @@
 import Participants from './components/Home/Participants'
-import JoinHackathon from './components/Home/JoinHackathon'
 import Theme from './components/Theme'
+import HackathonButtons from './components/Home/HackathonButtons'
 
 export default function Home() {
     return (
@@ -11,7 +11,7 @@ export default function Home() {
                         Weekly Hackathons
                     </h1>
                     <Theme />
-                    <JoinHackathon />
+                    <HackathonButtons />
                 </div>
                 <aside className="marquee hidden max-h-[500px] flex-1 items-center overflow-hidden text-[500px] font-extrabold lg:flex">
                     <p>komshat</p>

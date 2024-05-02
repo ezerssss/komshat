@@ -5,16 +5,16 @@ import {
     SheetHeader,
     SheetTitle,
     SheetDescription,
-    SheetFooter,
 } from '@/components/ui/sheet'
-import React from 'react'
+import React, { useState } from 'react'
 import GoogleIcon from '../icons/GoogleIcon'
 import useUser from '../hooks/useUser'
-import { UserRound } from 'lucide-react'
+import { Loader2, UserRound } from 'lucide-react'
 import Image from 'next/image'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import auth from '../firebase/auth'
 import { toast } from 'sonner'
+import { toastError } from '@/lib/utils'
 
 const provider = new GoogleAuthProvider()
 
@@ -27,18 +27,22 @@ function ProfileSheet(props: Readonly<PropsInterface>) {
     const { children, callback } = props
 
     const user = useUser()
+    const [isLoading, setIsLoading] = useState(false)
 
     async function signIn() {
         try {
+            setIsLoading(true)
             await signInWithPopup(auth, provider)
+
+            toast.info('Successfully logged-in.')
 
             if (callback) {
                 callback()
             }
         } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message)
-            }
+            toastError(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -91,11 +95,18 @@ function ProfileSheet(props: Readonly<PropsInterface>) {
                             </SheetDescription>
                         </SheetHeader>
                         <Button
-                            className="my-5 flex items-center gap-2"
+                            className="my-5 flex w-[189px] items-center gap-2"
+                            disabled={isLoading}
                             onClick={() => signIn()}
                         >
-                            <GoogleIcon className="w-5 fill-white" />
-                            Sign in with Google
+                            {isLoading ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                <>
+                                    <GoogleIcon className="w-5 fill-white" />
+                                    Sign in with Google
+                                </>
+                            )}
                         </Button>
                     </>
                 )}

@@ -7,7 +7,7 @@ import Navbar from './components/Navbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-    title: 'komshat weekly hackathons',
+    title: 'komshat',
     description: 'komshat weekly hackathons by the students for the students',
 }
 
@@ -23,7 +23,7 @@ export default function RootLayout({
                     <Navbar />
                 </header>
                 {children}
-                <Toaster />
+                <Toaster richColors />
             </body>
         </html>
     )

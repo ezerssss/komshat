@@ -6,6 +6,8 @@ export const JoinFormSchema = z.object({
     members: z.array(z.object({ name: z.string().min(1) })).min(1),
 })
 
+export type JoinInterface = z.infer<typeof JoinFormSchema>
+
 export const ParticipantSchema = JoinFormSchema.extend({
     hackathonID: z.string().uuid(),
     captainID: z.string().uuid(),
