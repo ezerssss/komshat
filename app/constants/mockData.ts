@@ -1,14 +1,14 @@
-import ProjectInterface from '../types/ProjectInterface'
 import { Timestamp } from 'firebase/firestore'
+import { ProjectInterface } from '../types/ProjectInterface'
 
 export const projectsMockData: ProjectInterface[] = [
     {
-        id: '1',
+        projectID: '1',
         hackathonID: '1',
         captainID: '1',
         teamName: 'dioskor0',
         teamPicture: 'picture',
-        members: ['Ezra Magbanua', 'Jhoanna Olana'],
+        members: [{ name: 'Ezra Magbanua' }, { name: 'Jhoanna Olana' }],
         title: 'AgrikulToura',
         description:
             "The best app out there. According to Patti Shi in 2014. The youth is seen to be the foundation of the workforce, however most of them don't want to venture into agriculture.",
@@ -22,12 +22,12 @@ export const projectsMockData: ProjectInterface[] = [
         dateSubmitted: new Timestamp(100, 20300),
     },
     {
-        id: '2',
+        projectID: '2',
         hackathonID: '1',
         captainID: '1',
         teamName: 'dioskor0',
         teamPicture: 'picture',
-        members: ['Ezra Magbanua', 'Jhoanna Olana'],
+        members: [{ name: 'Ezra Magbanua' }, { name: 'Jhoanna Olana' }],
         title: 'AgrikulToura',
         description:
             "The best app out there. According to Patti Shi in 2014. The youth is seen to be the foundation of the workforce, however most of them don't want to venture into agriculture.",
@@ -43,12 +43,12 @@ export const projectsMockData: ProjectInterface[] = [
         dateSubmitted: new Timestamp(100, 20300),
     },
     {
-        id: '3',
+        projectID: '3',
         hackathonID: '1',
         captainID: '1',
         teamName: 'dioskor0',
         teamPicture: 'picture',
-        members: ['Ezra Magbanua', 'Jhoanna Olana'],
+        members: [{ name: 'Ezra Magbanua' }, { name: 'Jhoanna Olana' }],
         title: 'AgrikulToura',
         description:
             "The best app out there. According to Patti Shi in 2014. The youth is seen to be the foundation of the workforce, however most of them don't want to venture into agriculture.",

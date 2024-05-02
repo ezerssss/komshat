@@ -2,9 +2,8 @@
 
 import GitHubIcon from '@/app/icons/GitHubIcon'
 import YouTubeIcon from '@/app/icons/YouTubeIcon'
-import { joinMembersString } from '@/lib/utils'
+import { joinMembersToString } from '@/lib/utils'
 import { HeartIcon, Share2Icon } from 'lucide-react'
-import ProjectInterface from '../../types/ProjectInterface'
 import Carousel from 'react-multi-carousel'
 import { carouselResponsive } from '@/app/constants/carousel'
 import { PhotoProvider, PhotoView } from 'react-photo-view'
@@ -14,10 +13,11 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { toast } from 'sonner'
 import { memo, useEffect, useState } from 'react'
 import Image from 'next/image'
+import { ProjectInterface } from '@/app/types/ProjectInterface'
 
 function Project(props: Readonly<ProjectInterface>) {
     const {
-        id,
+        projectID,
         teamName,
         teamPicture,
         members,
@@ -34,14 +34,14 @@ function Project(props: Readonly<ProjectInterface>) {
     useEffect(() => {
         if (window !== undefined) {
             setProjectURL(
-                `${window.location.origin}${window.location.pathname}#${id}`
+                `${window.location.origin}${window.location.pathname}#${projectID}`
             )
         }
-    }, [id])
+    }, [projectID])
 
     return (
         <article
-            id={id}
+            id={projectID}
             className="my-6 block max-w-[800px] rounded-md border-[1px] border-[#E5E7EB] shadow-md"
         >
             <section className="flex items-center gap-4 p-4">
@@ -51,7 +51,7 @@ function Project(props: Readonly<ProjectInterface>) {
                 <div>
                     <p className="text-sm text-gray-900">{teamName}</p>
                     <p className="text-xs text-gray-500">
-                        {joinMembersString(members)}
+                        {joinMembersToString(members)}
                     </p>
                 </div>
             </section>
@@ -99,7 +99,9 @@ function Project(props: Readonly<ProjectInterface>) {
                 </div>
                 <CopyToClipboard
                     text={projectURL}
-                    onCopy={() => toast('Copied shareable link to clipboard.')}
+                    onCopy={() =>
+                        toast.info('Copied shareable link to clipboard.')
+                    }
                 >
                     <div className="flex cursor-pointer items-center gap-2">
                         <Share2Icon className="w-[34px]" />
