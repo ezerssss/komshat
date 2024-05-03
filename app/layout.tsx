@@ -24,6 +24,18 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <link rel="icon" href="/icon.png" type="image/.png" />
+                <meta property="og:title" content="komshat" />
+                <meta name="twitter:title" content="komshat" />
+                <meta
+                    property="og:description"
+                    content="Weekly hackathon challenge! Build and create projects based around an automatically generated theme."
+                />
+                <meta
+                    property="twitter:description"
+                    content="Weekly hackathon challenge! Build and create projects based around an automatically generated theme."
+                />
+                <meta property="og:image" content="/banner.png" />
+                <meta property="twitter:image" content="/banner.png" />
             </head>
             <body className={inter.className}>
                 <WebVitals />
