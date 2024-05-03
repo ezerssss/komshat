@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useHackathon from './useHackathon'
 import { ParticipantInterface } from '../types/ParticipantInterface'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
 import db from '../firebase/db'
 import { toastError } from '@/lib/utils'
 import { ProjectInterface } from '../types/ProjectInterface'
@@ -55,7 +55,8 @@ function useParticipants() {
         try {
             const q = query(
                 projectsCollectionRef,
-                where('hackathonID', '==', hackathon.hackathonID)
+                where('hackathonID', '==', hackathon.hackathonID),
+                orderBy('hearts', 'desc')
             )
 
             const docs = await getDocs(q)
