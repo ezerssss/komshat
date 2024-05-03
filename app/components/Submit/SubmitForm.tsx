@@ -223,7 +223,7 @@ function SubmitForm() {
                                     />
                                 </FormControl>
                                 <FormDescription>
-                                    Your project&apos;s GitHub repository link
+                                    Your project&apos;s GitHub repository link.
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
@@ -315,11 +315,12 @@ function SubmitForm() {
                                                         </Button>
                                                     </div>
                                                 </FormControl>
-                                                <FormDescription>
-                                                    Showcase your project with
-                                                    images. First image will be
-                                                    the thumbnail.
-                                                </FormDescription>
+                                                {index === 0 && (
+                                                    <FormDescription>
+                                                        This will be the
+                                                        thumbnail.
+                                                    </FormDescription>
+                                                )}
                                                 <FormMessage />
                                             </FormItem>
                                         )}

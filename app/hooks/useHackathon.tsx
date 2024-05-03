@@ -88,15 +88,14 @@ function useHackathon(id: string = '') {
         try {
             const q = query(
                 hackathonsCollectionRef,
-                where('hackathonID', '==', id)
+                where('hackathonID', '==', id),
+                limit(1)
             )
 
             const results = await getDocs(q)
-            results.forEach((doc) => {
-                const data = doc.data() as HackathonInterface
+            const data = results.docs[0].data() as HackathonInterface
 
-                setHackathon(data)
-            })
+            setHackathon(data)
         } catch (error) {
             toastError(error)
         } finally {

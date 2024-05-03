@@ -2,15 +2,8 @@
 
 import GitHubIcon from '@/app/icons/GitHubIcon'
 import YouTubeIcon from '@/app/icons/YouTubeIcon'
-import {
-    getHackathonIDFromLocal,
-    isProjectLiked,
-    joinMembersToString,
-    setProjectAsLiked,
-    setProjectAsUnliked,
-    toastError,
-} from '@/lib/utils'
-import { Heart, HeartIcon, Share2Icon } from 'lucide-react'
+import { joinMembersToString } from '@/lib/utils'
+import { Heart, Share2Icon } from 'lucide-react'
 import Carousel from 'react-multi-carousel'
 import { carouselResponsive } from '@/app/constants/carousel'
 import { PhotoProvider, PhotoView } from 'react-photo-view'
@@ -22,7 +15,7 @@ import { memo, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ProjectInterface } from '@/app/types/ProjectInterface'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { likeProject, unlikeProject } from '@/app/firebase/functions'
+import useLike from '@/app/hooks/useLike'
 
 function Project(props: Readonly<ProjectInterface>) {
     const {
@@ -35,13 +28,10 @@ function Project(props: Readonly<ProjectInterface>) {
         github,
         youtube,
         images,
-        hearts,
-        hackathonID,
     } = props
 
     const [projectURL, setProjectURL] = useState('')
-    const [heartsState, setHeartsState] = useState(hearts)
-    const [isHearted, setIsHearted] = useState(isProjectLiked(projectID))
+    const { heartsState, handleHeart, isLikeable, isHearted } = useLike(props)
 
     useEffect(() => {
         if (window !== undefined) {
@@ -51,40 +41,7 @@ function Project(props: Readonly<ProjectInterface>) {
         }
     }, [projectID])
 
-    async function handleHeart() {
-        if (hackathonID !== getHackathonIDFromLocal()) {
-            toast.warning('Cannot like a project in a finished hackathon.')
-
-            return
-        }
-
-        if (isProjectLiked(projectID) || isHearted) {
-            setHeartsState(heartsState - 1)
-
-            try {
-                setIsHearted(false)
-                await unlikeProject({ projectID })
-                setProjectAsUnliked(projectID)
-            } catch (error) {
-                toastError(error)
-            }
-
-            return
-        }
-
-        setHeartsState(heartsState + 1)
-        setIsHearted(true)
-
-        try {
-            await likeProject({ projectID })
-
-            toast.info('Successfully liked a project.')
-
-            setProjectAsLiked(projectID)
-        } catch (error) {
-            toastError(error)
-        }
-    }
+    const heartStyle = isHearted ? 'red' : 'white'
 
     return (
         <article
@@ -125,7 +82,7 @@ function Project(props: Readonly<ProjectInterface>) {
                         <Carousel responsive={carouselResponsive}>
                             {images.map(({ url }, index) => (
                                 <PhotoView key={url} src={url}>
-                                    <div className="flex h-full cursor-pointer items-center justify-center">
+                                    <div className="flex h-full cursor-pointer items-center justify-center bg-black">
                                         <Image
                                             width="0"
                                             height="0"
@@ -144,11 +101,12 @@ function Project(props: Readonly<ProjectInterface>) {
             <div className="my-3.5 mb-6 mt-[34px] flex items-center gap-10 px-6 text-sm sm:px-14 sm:text-base">
                 <button
                     className="flex items-center gap-2"
+                    disabled={!isLikeable}
                     onClick={() => handleHeart()}
                 >
                     <Heart
                         className="w-34"
-                        fill={isHearted ? 'red' : 'white'}
+                        fill={!isLikeable ? 'gray' : heartStyle}
                     />
                     {heartsState}
                 </button>

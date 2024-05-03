@@ -9,8 +9,8 @@ import { ProjectInterface } from '../types/ProjectInterface'
 const participantsCollectionsRef = collection(db, 'participants')
 const projectsCollectionRef = collection(db, 'projects')
 
-function useParticipants() {
-    const { hackathon } = useHackathon()
+function useParticipants(hackathonID: string = '') {
+    const { hackathon } = useHackathon(hackathonID)
 
     const [participants, setParticipants] = useState<ParticipantInterface[]>([])
     const [isParticipantsLoading, setIsParticipantsLoading] = useState(true)

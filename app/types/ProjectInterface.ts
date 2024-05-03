@@ -4,7 +4,7 @@ import { ParticipantSchema } from './ParticipantInterface'
 
 export const SubmitProjectFormSchema = z.object({
     title: z.string().min(1),
-    description: z.string().min(1),
+    description: z.string().min(1).max(500),
     github: z.string().url().min(1),
     youtube: z.string().url().min(1),
     images: z.array(z.object({ url: z.string().min(1) })).min(1),
