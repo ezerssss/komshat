@@ -26,18 +26,11 @@ export function joinMembersToString(members: { name: string }[]): string {
 }
 
 export function getAuthErrorMessage(error: string): string {
-    error = error.replace(
-        'Firebase: HTTP Cloud Function returned an error: ',
-        ''
-    )
-
-    error = error.replace('(auth/internal-error).', '')
-
-    try {
-        return JSON.parse(error).error.message
-    } catch (_err) {
-        return error
+    if (error.includes('Unauthorized email')) {
+        return 'Unauthorized email. Please use an allowed email.'
     }
+
+    return error
 }
 
 export function toastError(error: unknown) {
