@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from 'sonner'
 import Navbar from './components/Navbar'
 import { WebVitals } from './components/web-vitals'
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,6 +26,7 @@ export default function RootLayout({
             </head>
             <body className={inter.className}>
                 <WebVitals />
+                <Analytics />
                 <header>
                     <Navbar />
                 </header>
