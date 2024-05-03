@@ -27,9 +27,12 @@ import Swal from 'sweetalert2'
 import sweetAlertConfig, {
     sweetAlertConfigNoCancel,
 } from '@/app/constants/sweetAlert'
+import { analytics } from '@/app/firebase/firebase'
+import { logEvent } from 'firebase/analytics'
 
 function JoinForm() {
-    const { isWithinDeadline, isParticipant, setIsParticipant } = useHackathon()
+    const { isWithinDeadline, isParticipant, setIsParticipant, hackathon } =
+        useHackathon()
     const {
         uploadTeamPicture,
         deleteFromURL,
@@ -61,6 +64,13 @@ function JoinForm() {
     })
 
     async function join(values: z.infer<typeof JoinFormSchema>) {
+        const log = await analytics
+        if (log) {
+            logEvent(log, 'join_hackathon', {
+                hackathonID: hackathon?.hackathonID ?? 'hackathon-id',
+            })
+        }
+
         if (!imageRef?.current?.files?.length) {
             form.setError('teamPicture', {
                 type: 'custom',

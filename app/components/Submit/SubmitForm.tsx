@@ -30,10 +30,17 @@ import sweetAlertConfig, {
 } from '@/app/constants/sweetAlert'
 import { submitProject } from '@/app/firebase/functions'
 import { Textarea } from '@/components/ui/textarea'
+import { analytics } from '@/app/firebase/firebase'
+import { logEvent } from 'firebase/analytics'
 
 function SubmitForm() {
-    const { isParticipant, hasSubmitted, setHasSubmitted, isWithinDeadline } =
-        useHackathon()
+    const {
+        isParticipant,
+        hasSubmitted,
+        setHasSubmitted,
+        isWithinDeadline,
+        hackathon,
+    } = useHackathon()
     const {
         uploadProjectImages,
         deleteFromURL,
@@ -76,6 +83,13 @@ function SubmitForm() {
 
         try {
             setIsSubmitting(true)
+
+            const log = await analytics
+            if (log) {
+                logEvent(log, 'submit_project', {
+                    hackathonID: hackathon?.hackathonID ?? 'hackathon-id',
+                })
+            }
 
             const urls = await uploadProjectImages(imageFiles)
 

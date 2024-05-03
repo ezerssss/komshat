@@ -15,6 +15,8 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import auth from '../firebase/auth'
 import { toast } from 'sonner'
 import { toastError } from '@/lib/utils'
+import { analytics } from '../firebase/firebase'
+import { logEvent } from 'firebase/analytics'
 
 const provider = new GoogleAuthProvider()
 
@@ -31,6 +33,12 @@ function ProfileSheet(props: Readonly<PropsInterface>) {
 
     async function signIn() {
         try {
+            const log = await analytics
+
+            if (log) {
+                logEvent(log, 'login')
+            }
+
             setIsLoading(true)
             await signInWithPopup(auth, provider)
 

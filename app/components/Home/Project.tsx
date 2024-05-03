@@ -16,6 +16,8 @@ import Image from 'next/image'
 import { ProjectInterface } from '@/app/types/ProjectInterface'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import useLike from '@/app/hooks/useLike'
+import { logEvent } from 'firebase/analytics'
+import { analytics } from '@/app/firebase/firebase'
 
 function Project(props: Readonly<ProjectInterface>) {
     const {
@@ -28,6 +30,7 @@ function Project(props: Readonly<ProjectInterface>) {
         github,
         youtube,
         images,
+        hackathonID,
     } = props
 
     const [projectURL, setProjectURL] = useState('')
@@ -42,6 +45,16 @@ function Project(props: Readonly<ProjectInterface>) {
     }, [projectID])
 
     const heartStyle = isHearted ? 'red' : 'white'
+
+    async function handleOnCopy() {
+        toast.info('Copied shareable link to clipboard.')
+
+        const log = await analytics
+
+        if (log) {
+            logEvent(log, 'share', { projectID, hackathonID })
+        }
+    }
 
     return (
         <article
@@ -110,12 +123,7 @@ function Project(props: Readonly<ProjectInterface>) {
                     />
                     {heartsState}
                 </button>
-                <CopyToClipboard
-                    text={projectURL}
-                    onCopy={() =>
-                        toast.info('Copied shareable link to clipboard.')
-                    }
-                >
+                <CopyToClipboard text={projectURL} onCopy={handleOnCopy}>
                     <div className="flex cursor-pointer items-center gap-2">
                         <Share2Icon className="w-[34px]" />
                         <p>Share</p>

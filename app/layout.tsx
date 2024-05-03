@@ -8,7 +8,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
     title: 'komshat',
-    description: 'komshat weekly hackathons by the students for the students',
+    description:
+        'Weekly hackathon challenge! Build and create projects based around an automatically generated theme.',
 }
 
 export default function RootLayout({
@@ -18,6 +19,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <link rel="icon" href="/icon.png" type="image/.png" />
+            </head>
             <body className={inter.className}>
                 <header>
                     <Navbar />
