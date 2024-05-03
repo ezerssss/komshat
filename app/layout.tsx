@@ -38,10 +38,14 @@ export default function RootLayout({
                     property="og:image"
                     content="https://komshat.vercel.app/banner.png"
                 />
+                <meta property="og:image:width" content="1152" />
+                <meta property="og:image:height" content="648" />
                 <meta
                     property="twitter:image"
                     content="https://komshat.vercel.app/banner.png"
                 />
+                <meta property="url" content="https://komshat.vercel.app/" />
+                <meta property="type" content="website" />
             </head>
             <body className={inter.className}>
                 <WebVitals />
