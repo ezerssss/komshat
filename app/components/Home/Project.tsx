@@ -11,7 +11,7 @@ import 'react-photo-view/dist/react-photo-view.css'
 import 'react-multi-carousel/lib/styles.css'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { toast } from 'sonner'
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { ProjectInterface } from '@/app/types/ProjectInterface'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -36,6 +36,8 @@ function Project(props: Readonly<ProjectInterface>) {
     const [projectURL, setProjectURL] = useState('')
     const { heartsState, handleHeart, isLikeable, isHearted } = useLike(props)
 
+    const projectRef = useRef<HTMLElement>(null)
+
     useEffect(() => {
         if (window !== undefined) {
             setProjectURL(
@@ -56,9 +58,29 @@ function Project(props: Readonly<ProjectInterface>) {
         }
     }
 
+    useEffect(() => {
+        if (window === undefined) {
+            return
+        }
+
+        if (!window.location.hash) {
+            return
+        }
+
+        if (!projectRef.current) {
+            return
+        }
+
+        const id = window.location.hash.replace('#', '')
+        if (projectID === id) {
+            projectRef.current.scrollIntoView({ behavior: 'smooth' })
+        }
+    }, [projectID, projectRef])
+
     return (
         <article
             id={projectID}
+            ref={projectRef}
             className="my-6 block max-w-[800px] rounded-md border-[1px] border-[#E5E7EB] shadow-md"
         >
             <section className="flex items-center gap-4 p-4">

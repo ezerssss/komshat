@@ -4,7 +4,7 @@ import {
     setProjectAsUnliked,
     toastError,
 } from '@/lib/utils'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ProjectInterface } from '../types/ProjectInterface'
 import useHackathon from './useHackathon'
 import { toast } from 'sonner'
@@ -54,6 +54,35 @@ function useLike(project: ProjectInterface) {
             toastError(error)
         }
     }
+
+    useEffect(() => {
+        addEventListener('storage', (event) => {
+            if (!event.key) {
+                return
+            }
+
+            if (event.key !== 'likedProjects') {
+                return
+            }
+
+            if (!event.newValue) {
+                setIsHearted(false)
+                setHeartsState(0)
+
+                return
+            }
+
+            const newLiked: string[] = JSON.parse(event.newValue)
+
+            if (newLiked.includes(projectID)) {
+                setIsHearted(true)
+                setHeartsState(heartsState + 1)
+            } else {
+                setIsHearted(false)
+                setHeartsState(heartsState - 1)
+            }
+        })
+    }, [heartsState, projectID])
 
     return { heartsState, isHearted, handleHeart, isLikeable }
 }

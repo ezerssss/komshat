@@ -6,19 +6,13 @@ import {
     SheetTitle,
     SheetDescription,
 } from '@/components/ui/sheet'
-import React, { useState } from 'react'
+import React from 'react'
 import GoogleIcon from '../icons/GoogleIcon'
 import useUser from '../hooks/useUser'
 import { Loader2, UserRound } from 'lucide-react'
 import Image from 'next/image'
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import auth from '../firebase/auth'
-import { toast } from 'sonner'
-import { toastError } from '@/lib/utils'
-import { analytics } from '../firebase/firebase'
-import { logEvent } from 'firebase/analytics'
-
-const provider = new GoogleAuthProvider()
+import useLogin from '../hooks/useLogin'
 
 interface PropsInterface {
     children: React.ReactNode
@@ -29,30 +23,7 @@ function ProfileSheet(props: Readonly<PropsInterface>) {
     const { children, callback } = props
 
     const user = useUser()
-    const [isLoading, setIsLoading] = useState(false)
-
-    async function signIn() {
-        try {
-            const log = await analytics
-
-            if (log) {
-                logEvent(log, 'login')
-            }
-
-            setIsLoading(true)
-            await signInWithPopup(auth, provider)
-
-            toast.info('Successfully logged-in.')
-
-            if (callback) {
-                callback()
-            }
-        } catch (error) {
-            toastError(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }
+    const { isLoading, signIn } = useLogin(callback)
 
     return (
         <Sheet>

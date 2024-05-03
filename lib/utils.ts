@@ -78,7 +78,6 @@ export function getLikedProjects(): string[] {
 
 export function setProjectAsLiked(projectID: string) {
     const likedProjects = getLikedProjects()
-    console.log(likedProjects)
 
     if (!likedProjects.includes(projectID)) {
         likedProjects.push(projectID)
@@ -89,8 +88,6 @@ export function setProjectAsLiked(projectID: string) {
 
 export function setProjectAsUnliked(projectID: string) {
     const likedProjects = getLikedProjects()
-
-    console.log(likedProjects, typeof likedProjects)
 
     const updatedProjects = likedProjects.filter((id) => id != projectID)
     localStorage.setItem('likedProjects', JSON.stringify(updatedProjects))
