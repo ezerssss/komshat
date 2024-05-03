@@ -13,6 +13,25 @@ export const metadata: Metadata = {
     title: 'komshat',
     description:
         'Weekly hackathon challenge! Build and create projects based around an automatically generated theme.',
+    openGraph: {
+        title: 'komshat',
+        description:
+            'Weekly hackathon challenge! Build and create projects based around an automatically generated theme.',
+        url: 'https://komshat.vercel.app/',
+        siteName: 'komshat',
+        type: 'website',
+        images: [
+            {
+                url: 'https://komshat.vercel.app/banner.png',
+                width: 1152,
+                height: 648,
+            },
+        ],
+        locale: 'en_US',
+    },
+    icons: {
+        icon: '/icon.png',
+    },
 }
 
 export default function RootLayout({
@@ -22,31 +41,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <head>
-                <link rel="icon" href="/icon.png" type="image/.png" />
-                <meta property="og:title" content="komshat" />
-                <meta name="twitter:title" content="komshat" />
-                <meta
-                    property="og:description"
-                    content="Weekly hackathon challenge! Build and create projects based around an automatically generated theme."
-                />
-                <meta
-                    property="twitter:description"
-                    content="Weekly hackathon challenge! Build and create projects based around an automatically generated theme."
-                />
-                <meta
-                    property="og:image"
-                    content="https://komshat.vercel.app/banner.png"
-                />
-                <meta property="og:image:width" content="1152" />
-                <meta property="og:image:height" content="648" />
-                <meta
-                    property="twitter:image"
-                    content="https://komshat.vercel.app/banner.png"
-                />
-                <meta property="og:url" content="https://komshat.vercel.app/" />
-                <meta property="og:type" content="website" />
-            </head>
             <body className={inter.className}>
                 <WebVitals />
                 <Analytics />
