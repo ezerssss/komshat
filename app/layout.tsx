@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'sonner'
 import Navbar from './components/Navbar'
+import { WebVitals } from './components/web-vitals'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,6 +24,7 @@ export default function RootLayout({
                 <link rel="icon" href="/icon.png" type="image/.png" />
             </head>
             <body className={inter.className}>
+                <WebVitals />
                 <header>
                     <Navbar />
                 </header>
