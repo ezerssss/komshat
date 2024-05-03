@@ -31,8 +31,13 @@ import { analytics } from '@/app/firebase/firebase'
 import { logEvent } from 'firebase/analytics'
 
 function JoinForm() {
-    const { isWithinDeadline, isParticipant, setIsParticipant, hackathon } =
-        useHackathon()
+    const {
+        isWithinDeadline,
+        isParticipant,
+        isLoading,
+        setIsParticipant,
+        hackathon,
+    } = useHackathon()
     const {
         uploadTeamPicture,
         deleteFromURL,
@@ -46,7 +51,11 @@ function JoinForm() {
     const imageRef = useRef<HTMLInputElement | null>(null)
 
     const disabled =
-        !isWithinDeadline || isUploading || isJoining || isParticipant
+        !isWithinDeadline ||
+        isUploading ||
+        isJoining ||
+        isParticipant ||
+        isLoading
 
     const form = useForm<z.infer<typeof JoinFormSchema>>({
         resolver: zodResolver(JoinFormSchema),
