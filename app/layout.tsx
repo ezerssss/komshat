@@ -44,8 +44,8 @@ export default function RootLayout({
                     property="twitter:image"
                     content="https://komshat.vercel.app/banner.png"
                 />
-                <meta property="url" content="https://komshat.vercel.app/" />
-                <meta property="type" content="website" />
+                <meta property="og:url" content="https://komshat.vercel.app/" />
+                <meta property="og:type" content="website" />
             </head>
             <body className={inter.className}>
                 <WebVitals />
