@@ -19,12 +19,12 @@ export const metadata: Metadata = {
             'Weekly hackathon challenge! Build and create projects based around an automatically generated theme.',
         url: 'https://komshat.vercel.app/',
         siteName: 'komshat',
-        type: 'website',
+        type: 'article',
         images: [
             {
                 url: 'https://komshat.vercel.app/preview.png',
                 width: 1152,
-                height: 647,
+                height: 648,
             },
         ],
         locale: 'en_US',
