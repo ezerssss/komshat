@@ -41,8 +41,7 @@ export function toastError(error: unknown) {
     if (error instanceof FirebaseError) {
         if (error.code === AuthErrorCodes.INTERNAL_ERROR) {
             message = getAuthErrorMessage(error.message)
-        }
-        if (error.code === AuthErrorCodes.POPUP_CLOSED_BY_USER) {
+        } else if (error.code === AuthErrorCodes.POPUP_CLOSED_BY_USER) {
             message = 'Login cancelled by user.'
         } else {
             message = error.message
