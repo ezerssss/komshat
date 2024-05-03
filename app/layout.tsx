@@ -22,9 +22,9 @@ export const metadata: Metadata = {
         type: 'website',
         images: [
             {
-                url: 'https://komshat.vercel.app/banner2.png',
+                url: 'https://komshat.vercel.app/preview.png',
                 width: 1152,
-                height: 648,
+                height: 647,
             },
         ],
         locale: 'en_US',
