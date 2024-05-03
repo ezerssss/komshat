@@ -1,2 +1,7 @@
 User-Agent: *
-Allow:
+Allow: /
+
+User-Agent: facebookexternalhit 
+Allow: /
+Allow: /join/
+Allow: /submit/
