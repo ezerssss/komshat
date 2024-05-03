@@ -40,6 +40,7 @@ function SubmitForm() {
         setHasSubmitted,
         isWithinDeadline,
         hackathon,
+        isChecking,
     } = useHackathon()
     const {
         uploadProjectImages,
@@ -59,7 +60,8 @@ function SubmitForm() {
         !isParticipant ||
         isSubmitting ||
         hasSubmitted ||
-        !isWithinDeadline
+        !isWithinDeadline ||
+        isChecking
 
     const form = useForm<z.infer<typeof SubmitProjectFormSchema>>({
         resolver: zodResolver(SubmitProjectFormSchema),
@@ -365,7 +367,7 @@ function SubmitForm() {
                 </div>
             )}
 
-            {!isParticipant && (
+            {!isParticipant && !isChecking && (
                 <div className="mt-3 w-full text-center text-xs text-gray-400">
                     <p>
                         It seems that you are not yet registered to this

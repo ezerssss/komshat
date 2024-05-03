@@ -37,6 +37,7 @@ function JoinForm() {
         isLoading,
         setIsParticipant,
         hackathon,
+        isChecking,
     } = useHackathon()
     const {
         uploadTeamPicture,
@@ -55,7 +56,8 @@ function JoinForm() {
         isUploading ||
         isJoining ||
         isParticipant ||
-        isLoading
+        isLoading ||
+        isChecking
 
     const form = useForm<z.infer<typeof JoinFormSchema>>({
         resolver: zodResolver(JoinFormSchema),

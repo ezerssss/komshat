@@ -20,6 +20,7 @@ function useHackathon(id: string = '') {
     const user = useUser()
 
     const [isParticipant, setIsParticipant] = useState(false)
+    const [isChecking, setIsChecking] = useState(true)
     const [hasSubmitted, setHasSubmitted] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [hackathon, setHackathon] = useState<HackathonInterface | null>(null)
@@ -56,6 +57,8 @@ function useHackathon(id: string = '') {
 
                 setIsParticipant(!result.empty)
                 setHasSubmitted(!project.empty)
+
+                setIsChecking(false)
             }
         })()
     }, [user, hackathon])
@@ -119,6 +122,7 @@ function useHackathon(id: string = '') {
         setIsParticipant,
         setHasSubmitted,
         hasSubmitted,
+        isChecking,
     }
 }
 

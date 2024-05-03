@@ -1,5 +1,5 @@
 User-Agent: *
-Allow: /
+Disallow: 
 
-User-Agent: facebookexternalhit
-Allow: /
+User-agent: facebookexternalhit
+Disallow:
