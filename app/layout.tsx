@@ -17,7 +17,6 @@ export const metadata: Metadata = {
         title: 'komshat',
         description:
             'Weekly hackathon challenge! Build and create projects based around an automatically generated theme.',
-        url: 'https://komshat.vercel.app/',
         siteName: 'komshat',
         type: 'article',
         images: [
