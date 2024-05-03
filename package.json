@@ -27,6 +27,7 @@
     "lucide-react": "^0.376.0",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
+    "obscenity": "^0.2.1",
     "react": "^18",
     "react-copy-to-clipboard": "^5.1.0",
     "react-countdown": "^2.3.5",

@@ -1,6 +1,8 @@
 import { toastError } from '@/lib/utils'
 import useHackathon from './useHackathon'
 import {
+    StorageError,
+    StorageErrorCode,
     deleteObject,
     getDownloadURL,
     ref,
@@ -24,6 +26,12 @@ function useUpload() {
 
             await deleteObject(imageRef)
         } catch (error) {
+            if (error instanceof StorageError) {
+                if (error.code === StorageErrorCode.OBJECT_NOT_FOUND) {
+                    return
+                }
+            }
+
             toastError(error)
         }
     }

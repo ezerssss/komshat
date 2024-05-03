@@ -155,135 +155,131 @@ function JoinForm() {
     }
 
     return (
-        <>
-            <div className="mx-auto flex h-full w-full flex-col items-center justify-center rounded-md border-2 px-5 py-10  lg:min-w-[60%] lg:max-w-[500px]">
-                <Form {...form}>
-                    <form
-                        className="space-y-8"
-                        onSubmit={form.handleSubmit(onSubmit)}
-                    >
-                        <FormField
-                            control={form.control}
-                            name="teamName"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Team name</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="text"
-                                            placeholder="Enter name"
-                                            onKeyDown={(e) => checkKeyDown(e)}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your public team name.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="teamPicture"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Team picture</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type="file"
-                                            accept="image/*"
-                                            ref={imageRef}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This will be your public team picture.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div>
-                            <FormLabel>Member names</FormLabel>
-                            <div className="space-y-4">
-                                {fields.map((field, index) => (
-                                    <FormField
-                                        key={field.id}
-                                        control={form.control}
-                                        name={`members.${index}.name`}
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormDescription />
-                                                <FormControl>
-                                                    <div className="flex gap-2">
-                                                        <Input
-                                                            {...field}
-                                                            type="text"
-                                                            placeholder="Enter member name"
-                                                            onKeyDown={(e) =>
-                                                                checkKeyDown(e)
-                                                            }
-                                                        />
-                                                        <Button
-                                                            className="min-w-[41px]"
-                                                            type="button"
-                                                            variant={
-                                                                index != 0
-                                                                    ? 'destructive'
-                                                                    : 'default'
-                                                            }
-                                                            onClick={() =>
-                                                                handleMemberButton(
-                                                                    index
-                                                                )
-                                                            }
-                                                        >
-                                                            {index != 0
-                                                                ? '-'
-                                                                : '+'}
-                                                        </Button>
-                                                    </div>
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
+        <div className="mx-auto flex h-full w-full flex-col items-center justify-center rounded-md border-2 px-5 py-10  lg:min-w-[60%] lg:max-w-[500px]">
+            <Form {...form}>
+                <form
+                    className="space-y-8"
+                    onSubmit={form.handleSubmit(onSubmit)}
+                >
+                    <FormField
+                        control={form.control}
+                        name="teamName"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Team name</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="text"
+                                        placeholder="Enter name"
+                                        onKeyDown={(e) => checkKeyDown(e)}
+                                        {...field}
                                     />
-                                ))}
-                            </div>
+                                </FormControl>
+                                <FormDescription>
+                                    This is your public team name.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="teamPicture"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Team picture</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        type="file"
+                                        accept="image/*"
+                                        ref={imageRef}
+                                    />
+                                </FormControl>
+                                <FormDescription>
+                                    This will be your public team picture.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div>
+                        <FormLabel>Member names</FormLabel>
+                        <div className="space-y-4">
+                            {fields.map((field, index) => (
+                                <FormField
+                                    key={field.id}
+                                    control={form.control}
+                                    name={`members.${index}.name`}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormDescription />
+                                            <FormControl>
+                                                <div className="flex gap-2">
+                                                    <Input
+                                                        {...field}
+                                                        type="text"
+                                                        placeholder="Enter member name"
+                                                        onKeyDown={(e) =>
+                                                            checkKeyDown(e)
+                                                        }
+                                                    />
+                                                    <Button
+                                                        className="min-w-[41px]"
+                                                        type="button"
+                                                        variant={
+                                                            index != 0
+                                                                ? 'destructive'
+                                                                : 'default'
+                                                        }
+                                                        onClick={() =>
+                                                            handleMemberButton(
+                                                                index
+                                                            )
+                                                        }
+                                                    >
+                                                        {index != 0 ? '-' : '+'}
+                                                    </Button>
+                                                </div>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            ))}
                         </div>
-                        <div className="flex justify-center">
-                            <Button
-                                type="submit"
-                                className="w-[150px]"
-                                disabled={disabled}
-                            >
-                                {isUploading || isJoining ? (
-                                    <Loader2 className="animate-spin" />
-                                ) : (
-                                    'Join Hackathon'
-                                )}
-                            </Button>
-                        </div>
-                    </form>
-                </Form>
-                {isUploading && (
-                    <div className="mt-2 w-full max-w-[300px]">
-                        <p className="text-xs text-gray-400">Uploading image</p>
-                        <Progress value={progress} />
                     </div>
-                )}
+                    <div className="flex justify-center">
+                        <Button
+                            type="submit"
+                            className="w-[150px]"
+                            disabled={disabled}
+                        >
+                            {isUploading || isJoining ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                'Join Hackathon'
+                            )}
+                        </Button>
+                    </div>
+                </form>
+            </Form>
+            {isUploading && (
+                <div className="mt-2 w-full max-w-[300px]">
+                    <p className="text-xs text-gray-400">Uploading image</p>
+                    <Progress value={progress} />
+                </div>
+            )}
 
-                {isWithinDeadline && isParticipant && (
-                    <div className="mt-3 w-full text-center text-xs text-gray-400">
-                        <p>You have already joined this hackathon.</p>
-                        <Link href="/submit" className="underline">
-                            Submit a project instead?
-                        </Link>
-                    </div>
-                )}
-            </div>
-        </>
+            {isWithinDeadline && isParticipant && (
+                <div className="mt-3 w-full text-center text-xs text-gray-400">
+                    <p>You have already joined this hackathon.</p>
+                    <Link href="/submit" className="underline">
+                        Submit a project instead?
+                    </Link>
+                </div>
+            )}
+        </div>
     )
 }
 

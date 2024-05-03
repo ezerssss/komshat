@@ -2,7 +2,7 @@
 
 import GitHubIcon from '@/app/icons/GitHubIcon'
 import YouTubeIcon from '@/app/icons/YouTubeIcon'
-import { joinMembersToString } from '@/lib/utils'
+import { joinMembersToString, sanitizeString } from '@/lib/utils'
 import { Heart, Share2Icon } from 'lucide-react'
 import Carousel from 'react-multi-carousel'
 import { carouselResponsive } from '@/app/constants/carousel'
@@ -77,6 +77,8 @@ function Project(props: Readonly<ProjectInterface>) {
         }
     }, [projectID, projectRef])
 
+    let teamNameSanitized = sanitizeString(teamName.replace('Team', ''))
+
     return (
         <article
             id={projectID}
@@ -89,19 +91,21 @@ function Project(props: Readonly<ProjectInterface>) {
                     <AvatarFallback>{teamName[0]}</AvatarFallback>
                 </Avatar>
                 <div>
-                    <p className="text-sm text-gray-900">{teamName}</p>
+                    <p className="text-sm text-gray-900">
+                        Team {teamNameSanitized}
+                    </p>
                     <p className="text-xs text-gray-500">
-                        Members: {joinMembersToString(members)}
+                        Members: {sanitizeString(joinMembersToString(members))}
                     </p>
                 </div>
             </section>
             <div className="px-6 sm:px-16">
                 <section className="mb-3.5 mt-9">
                     <h3 className="mb-1.5 text-xl font-semibold sm:text-2xl">
-                        {title}
+                        {sanitizeString(title)}
                     </h3>
                     <p className="text-pretty text-sm leading-7 sm:text-base">
-                        {description}
+                        {sanitizeString(description)}
                     </p>
                 </section>
                 <section className="mb-8 mt-3.5 flex gap-2">

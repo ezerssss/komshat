@@ -3,6 +3,12 @@ import { FirebaseError } from 'firebase/app'
 import { AuthErrorCodes } from 'firebase/auth'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
+import {
+    RegExpMatcher,
+    TextCensor,
+    englishDataset,
+    englishRecommendedTransformers,
+} from 'obscenity'
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -97,4 +103,16 @@ export function isProjectLiked(projectID: string): boolean {
     const likedProjects = getLikedProjects()
 
     return likedProjects.includes(projectID)
+}
+
+const censor = new TextCensor()
+const matcher = new RegExpMatcher({
+    ...englishDataset.build(),
+    ...englishRecommendedTransformers,
+})
+
+export function sanitizeString(string: string): string {
+    const matches = matcher.getAllMatches(string)
+
+    return censor.applyTo(string, matches)
 }
