@@ -70,10 +70,6 @@ function Project(props: Readonly<ProjectInterface>) {
             return
         }
 
-        if (!window.location.hash) {
-            return
-        }
-
         if (!projectRef.current) {
             return
         }
