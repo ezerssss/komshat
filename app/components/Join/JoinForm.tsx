@@ -279,6 +279,12 @@ function JoinForm() {
                     </Link>
                 </div>
             )}
+
+            {!isWithinDeadline && (
+                <div className="mt-3 w-full text-center text-xs text-gray-400">
+                    <p>This hackathon is not accepting participants anymore.</p>
+                </div>
+            )}
         </div>
     )
 }

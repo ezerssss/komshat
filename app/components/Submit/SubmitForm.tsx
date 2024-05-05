@@ -385,6 +385,12 @@ function SubmitForm() {
                     <p>Make sure to share your projects to your friends!</p>
                 </div>
             )}
+
+            {!isWithinDeadline && (
+                <div className="mt-3 w-full text-center text-xs text-gray-400">
+                    <p>This hackathon is not accepting submissions anymore.</p>
+                </div>
+            )}
         </div>
     )
 }
