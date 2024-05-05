@@ -126,6 +126,7 @@ function Project(props: Readonly<ProjectInterface>) {
                                             width="0"
                                             height="0"
                                             sizes="100vw"
+                                            quality={95}
                                             className="h-auto w-auto object-contain shadow-md"
                                             alt={`${url}/${index}`}
                                             src={url}
