@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import useLike from '@/app/hooks/useLike'
 import { logEvent } from 'firebase/analytics'
 import { analytics } from '@/app/firebase/firebase'
+import { useSearchParams } from 'next/navigation'
 
 function Project(props: Readonly<ProjectInterface>) {
     const {
@@ -33,6 +34,8 @@ function Project(props: Readonly<ProjectInterface>) {
         hackathonID,
     } = props
 
+    const searchParams = useSearchParams()
+
     const [projectURL, setProjectURL] = useState('')
     const { heartsState, handleHeart, isLikeable, isHearted } = useLike(props)
 
@@ -41,10 +44,10 @@ function Project(props: Readonly<ProjectInterface>) {
     useEffect(() => {
         if (window !== undefined) {
             setProjectURL(
-                `${window.location.origin}${window.location.pathname}#${projectID}`
+                `${window.location.origin}${window.location.pathname}?projectID=${projectID}&hackathonID=${hackathonID}`
             )
         }
-    }, [projectID])
+    }, [projectID, hackathonID])
 
     const heartStyle = isHearted ? 'red' : 'white'
 
@@ -59,7 +62,11 @@ function Project(props: Readonly<ProjectInterface>) {
     }
 
     useEffect(() => {
-        if (window === undefined) {
+        if (
+            window === undefined ||
+            !searchParams ||
+            !searchParams.get('projectID')
+        ) {
             return
         }
 
@@ -71,11 +78,10 @@ function Project(props: Readonly<ProjectInterface>) {
             return
         }
 
-        const id = window.location.hash.replace('#', '')
-        if (projectID === id) {
+        if (projectID === searchParams.get('projectID')) {
             projectRef.current.scrollIntoView({ behavior: 'smooth' })
         }
-    }, [projectID, projectRef])
+    }, [projectID, projectRef, searchParams])
 
     let teamNameSanitized = sanitizeString(teamName.replace('Team', ''))
 
