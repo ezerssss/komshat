@@ -13,7 +13,11 @@ export default function HackathonButtons() {
     const user = useUser()
     const router = useRouter()
 
-    const { isParticipant, hasSubmitted } = useHackathon()
+    const { isParticipant, hasSubmitted, isWithinDeadline } = useHackathon()
+
+    if (!isWithinDeadline) {
+        return <Button className="mt-5">Hackathon ended</Button>
+    }
 
     if (!user) {
         return (
