@@ -16,7 +16,11 @@ export default function HackathonButtons() {
     const { isParticipant, hasSubmitted, isWithinDeadline } = useHackathon()
 
     if (!isWithinDeadline) {
-        return <Button className="mt-5">Hackathon ended</Button>
+        return (
+            <Button className="mt-5" disabled>
+                Hackathon ended
+            </Button>
+        )
     }
 
     if (!user) {
