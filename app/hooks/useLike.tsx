@@ -16,7 +16,7 @@ function useLike(project: ProjectInterface) {
 
     const currentDate = useMemo(() => new Date(), [])
     const isLikeable: boolean = useMemo(
-        () => !!hackathon && currentDate < hackathon.dateEnd.toDate(),
+        () => !!hackathon && currentDate < hackathon.dateVotingEnd.toDate(),
         [currentDate, hackathon]
     )
 

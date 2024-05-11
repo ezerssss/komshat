@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { HackathonInterface } from '../types/HackathonInterface'
 import {
+    DocumentData,
+    QuerySnapshot,
     collection,
     getDocs,
     limit,
@@ -31,12 +33,16 @@ function useHackathon(id: string = '') {
             !!user &&
             !!hackathon &&
             currentDate < hackathon.dateSubmissionEnd.toDate(),
-        [hackathon, currentDate]
+        [hackathon, currentDate, user]
     )
 
     useEffect(() => {
         ;(async () => {
             if (user && hackathon) {
+                const promises: Promise<
+                    QuerySnapshot<DocumentData, DocumentData>
+                >[] = []
+
                 const participantQuery = query(
                     participantsCollectionRef,
                     where('hackathonID', '==', hackathon.hackathonID),
@@ -44,7 +50,7 @@ function useHackathon(id: string = '') {
                     limit(1)
                 )
 
-                const result = await getDocs(participantQuery)
+                promises.push(getDocs(participantQuery))
 
                 const projectQuery = query(
                     projectsCollectionRef,
@@ -53,10 +59,15 @@ function useHackathon(id: string = '') {
                     limit(1)
                 )
 
-                const project = await getDocs(projectQuery)
+                promises.push(getDocs(projectQuery))
 
-                setIsParticipant(!result.empty)
-                setHasSubmitted(!project.empty)
+                const response = await Promise.all(promises)
+
+                const participantResult = response[0]
+                const projectResult = response[1]
+
+                setIsParticipant(!participantResult.empty)
+                setHasSubmitted(!projectResult.empty)
 
                 setIsChecking(false)
             }

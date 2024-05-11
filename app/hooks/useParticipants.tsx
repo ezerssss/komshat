@@ -18,6 +18,22 @@ function useParticipants(hackathonID: string = '') {
     const [projects, setProjects] = useState<ProjectInterface[]>([])
     const [isProjectsLoading, setIsProjectsLoading] = useState(true)
 
+    const winningCaptainID =
+        projects.find(
+            (project) => project.projectID === hackathon?.winningProjectID
+        )?.captainID ?? null
+
+    const winningParticipant = participants.filter(
+        (participant) => participant.captainID === winningCaptainID
+    )
+
+    const orderedParticipants = [
+        ...winningParticipant,
+        ...participants.filter(
+            (participant) => participant.captainID !== winningCaptainID
+        ),
+    ]
+
     async function getParticipants() {
         if (!hackathon) {
             return
@@ -86,7 +102,14 @@ function useParticipants(hackathonID: string = '') {
         getProjects()
     }, [hackathon])
 
-    return { participants, isParticipantsLoading, projects, isProjectsLoading }
+    return {
+        participants: orderedParticipants,
+        isParticipantsLoading,
+        projects,
+        isProjectsLoading,
+        winningProjectID: hackathon?.winningProjectID,
+        winningCaptainID,
+    }
 }
 
 export default useParticipants

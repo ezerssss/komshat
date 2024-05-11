@@ -1,8 +1,13 @@
-'use client'
-
+import { Metadata } from 'next'
 import JoinForm from '../components/Join/JoinForm'
 import ProtectedRouteWrapper from '../components/ProtectedRouteWrapper'
 import Theme from '../components/Theme'
+import { genericMetadata } from '../constants/metadata'
+
+export const metadata: Metadata = {
+    ...genericMetadata,
+    title: "komshat | Join this week's hackathon",
+}
 
 function Join() {
     return (

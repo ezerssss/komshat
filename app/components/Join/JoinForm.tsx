@@ -140,14 +140,6 @@ function JoinForm() {
         }
     }, [imageError, form])
 
-    function handleMemberButton(index: number) {
-        if (index === 0) {
-            append({ name: '' })
-        } else {
-            remove(index)
-        }
-    }
-
     function checkKeyDown(
         e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
     ) {
@@ -224,22 +216,37 @@ function JoinForm() {
                                                             checkKeyDown(e)
                                                         }
                                                     />
-                                                    <Button
-                                                        className="min-w-[41px]"
-                                                        type="button"
-                                                        variant={
-                                                            index != 0
-                                                                ? 'destructive'
-                                                                : 'default'
-                                                        }
-                                                        onClick={() =>
-                                                            handleMemberButton(
-                                                                index
-                                                            )
-                                                        }
-                                                    >
-                                                        {index != 0 ? '-' : '+'}
-                                                    </Button>
+                                                    {index ==
+                                                        form.getValues().members
+                                                            .length -
+                                                            1 && (
+                                                        <Button
+                                                            className="min-w-[41px]"
+                                                            type="button"
+                                                            variant="default"
+                                                            onClick={() =>
+                                                                append({
+                                                                    name: '',
+                                                                })
+                                                            }
+                                                            disabled={disabled}
+                                                        >
+                                                            +
+                                                        </Button>
+                                                    )}
+                                                    {index != 0 && (
+                                                        <Button
+                                                            className="min-w-[41px]"
+                                                            type="button"
+                                                            variant="destructive"
+                                                            onClick={() =>
+                                                                remove(index)
+                                                            }
+                                                            disabled={disabled}
+                                                        >
+                                                            -
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             </FormControl>
                                             <FormMessage />
