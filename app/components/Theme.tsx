@@ -96,7 +96,7 @@ function Theme() {
                                         : hackathon.dateEnd.toDate()
                                 }
                             >
-                                <p>end</p>
+                                <p>Winner announced</p>
                             </Countdown>
                         </>
                     )}
