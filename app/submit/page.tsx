@@ -1,8 +1,13 @@
-'use client'
-
+import { Metadata } from 'next'
 import ProtectedRouteWrapper from '../components/ProtectedRouteWrapper'
 import SubmitForm from '../components/Submit/SubmitForm'
 import Theme from '../components/Theme'
+import { genericMetadata } from '../constants/metadata'
+
+export const metadata: Metadata = {
+    ...genericMetadata,
+    title: 'komshat | Submit a project',
+}
 
 function Submit() {
     return (

@@ -3,7 +3,7 @@
 import GitHubIcon from '@/app/icons/GitHubIcon'
 import YouTubeIcon from '@/app/icons/YouTubeIcon'
 import { joinMembersToString, sanitizeString } from '@/lib/utils'
-import { Heart, Share2Icon } from 'lucide-react'
+import { Crown, Heart, Share2Icon } from 'lucide-react'
 import Carousel from 'react-multi-carousel'
 import { carouselResponsive } from '@/app/constants/carousel'
 import { PhotoProvider, PhotoView } from 'react-photo-view'
@@ -19,8 +19,17 @@ import useLike from '@/app/hooks/useLike'
 import { logEvent } from 'firebase/analytics'
 import { analytics } from '@/app/firebase/firebase'
 import { useSearchParams } from 'next/navigation'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
 
-function Project(props: Readonly<ProjectInterface>) {
+interface PropsInterface extends ProjectInterface {
+    winningProjectID: string | null | undefined
+}
+
+function Project(props: PropsInterface) {
     const {
         projectID,
         teamName,
@@ -32,7 +41,10 @@ function Project(props: Readonly<ProjectInterface>) {
         youtube,
         images,
         hackathonID,
+        winningProjectID,
     } = props
+
+    const isWinner = projectID === winningProjectID
 
     const searchParams = useSearchParams()
 
@@ -62,11 +74,7 @@ function Project(props: Readonly<ProjectInterface>) {
     }
 
     useEffect(() => {
-        if (
-            window === undefined ||
-            !searchParams ||
-            !searchParams.get('projectID')
-        ) {
+        if (window === undefined || !searchParams?.get('projectID')) {
             return
         }
 
@@ -85,7 +93,7 @@ function Project(props: Readonly<ProjectInterface>) {
         <article
             id={projectID}
             ref={projectRef}
-            className="my-6 block max-w-[800px] rounded-md border-[1px] border-[#E5E7EB] shadow-md"
+            className="relative my-6 block max-w-[800px] rounded-md border-[1px] border-[#E5E7EB] shadow-md"
         >
             <section className="flex items-center gap-4 p-4">
                 <Avatar>
@@ -159,6 +167,22 @@ function Project(props: Readonly<ProjectInterface>) {
                     </div>
                 </CopyToClipboard>
             </div>
+
+            {isWinner && (
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Crown
+                            className="absolute right-4 top-4 cursor-pointer"
+                            color="#ffbb48"
+                        />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-fit">
+                        <p className="text-sm">
+                            The winning project for this hackathon.
+                        </p>
+                    </PopoverContent>
+                </Popover>
+            )}
         </article>
     )
 }

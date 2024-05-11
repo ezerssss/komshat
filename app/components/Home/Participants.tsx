@@ -11,8 +11,14 @@ interface PropsInterface {
 }
 
 function Participants(props: PropsInterface) {
-    const { participants, isParticipantsLoading, projects, isProjectsLoading } =
-        useParticipants(props.hackathonID)
+    const {
+        participants,
+        isParticipantsLoading,
+        projects,
+        isProjectsLoading,
+        winningProjectID,
+        winningCaptainID,
+    } = useParticipants(props.hackathonID)
 
     return (
         <section className="px-5 sm:px-14">
@@ -23,7 +29,11 @@ function Participants(props: PropsInterface) {
             )}
             <div className="my-5 flex flex-wrap gap-4">
                 {participants.map((participant) => (
-                    <Participant key={participant.captainID} {...participant} />
+                    <Participant
+                        key={participant.captainID}
+                        winningCaptainID={winningCaptainID}
+                        {...participant}
+                    />
                 ))}
             </div>
 
@@ -33,7 +43,11 @@ function Participants(props: PropsInterface) {
                 <p className="mb-10 mt-4 text-gray-400">No submissions</p>
             )}
             {projects.map((project) => (
-                <Project key={project.projectID} {...project} />
+                <Project
+                    key={project.projectID}
+                    winningProjectID={winningProjectID}
+                    {...project}
+                />
             ))}
         </section>
     )

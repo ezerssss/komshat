@@ -150,14 +150,6 @@ function SubmitForm() {
         e.key === 'Enter' && e.preventDefault()
     }
 
-    function handleImageButton(index: number) {
-        if (index == 0) {
-            append({ url: '' })
-        } else {
-            remove(index)
-        }
-    }
-
     function handleImageChange(
         event: FormEvent<HTMLInputElement>,
         index: number
@@ -310,25 +302,43 @@ function SubmitForm() {
                                                                 Preview
                                                             </Button>
                                                         </PhotoView>
-                                                        <Button
-                                                            className="min-w-[41px]"
-                                                            type="button"
-                                                            variant={
-                                                                index != 0
-                                                                    ? 'destructive'
-                                                                    : 'default'
-                                                            }
-                                                            onClick={() =>
-                                                                handleImageButton(
-                                                                    index
-                                                                )
-                                                            }
-                                                            disabled={disabled}
-                                                        >
-                                                            {index != 0
-                                                                ? '-'
-                                                                : '+'}
-                                                        </Button>
+                                                        {index ==
+                                                            form.getValues()
+                                                                .images.length -
+                                                                1 && (
+                                                            <Button
+                                                                className="min-w-[41px]"
+                                                                type="button"
+                                                                variant="default"
+                                                                onClick={() =>
+                                                                    append({
+                                                                        url: '',
+                                                                    })
+                                                                }
+                                                                disabled={
+                                                                    disabled
+                                                                }
+                                                            >
+                                                                +
+                                                            </Button>
+                                                        )}
+                                                        {index != 0 && (
+                                                            <Button
+                                                                className="min-w-[41px]"
+                                                                type="button"
+                                                                variant="destructive"
+                                                                onClick={() =>
+                                                                    remove(
+                                                                        index
+                                                                    )
+                                                                }
+                                                                disabled={
+                                                                    disabled
+                                                                }
+                                                            >
+                                                                -
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                 </FormControl>
                                                 {index === 0 && (
@@ -379,7 +389,7 @@ function SubmitForm() {
                 </div>
             )}
 
-            {hasSubmitted && (
+            {hasSubmitted && isWithinDeadline && (
                 <div className="mt-3 w-full text-center text-xs text-gray-400">
                     <p>You have already submitted your project.</p>
                     <p>Make sure to share your projects to your friends!</p>
