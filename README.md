@@ -41,3 +41,7 @@ Contributions to **Komshat** are encouraged! If you have ideas for enhancements,
 If you encounter any bugs or have suggestions for improvement, please [submit an issue](https://github.com/ezerssss/komshat/issues). Your feedback is valuable in enhancing the platform.
 
 Happy hacking! 👾🤖
+
+## Contributors
+- Ezra Magbanua
+- Jhoanna Olana
