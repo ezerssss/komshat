@@ -20,7 +20,26 @@ export const HackathonSchema = ThemeSchema.extend({
 
 export type HackathonInterface = z.infer<typeof HackathonSchema>
 
-export const CreateHackathonSchema = z.object({
+export type DurationInDaysInterface = {
+    recognition: number
+    submission: number
+    voting: number
+}
+
+export const AdminCreateHackathonSchema = ThemeSchema.extend({
+    startHour: z.number().min(0).max(23),
+    durationInDays: z.object({
+        recognition: z.number().min(1),
+        submission: z.number().min(1),
+        voting: z.number().min(1),
+    }),
+})
+
+export type AdminCreateHackathonInterface = z.infer<
+    typeof AdminCreateHackathonSchema
+>
+
+export const HackathonConfigSchema = z.object({
     durationInDays: z.object({
         recognition: z.number().min(1),
         submission: z.number().min(1),
@@ -28,6 +47,7 @@ export const CreateHackathonSchema = z.object({
     }),
     startDay: z.number().min(0).max(6),
     startHour: z.number().min(0).max(23),
+    autoGenerateTheme: z.boolean().default(true),
 })
 
-export type CreateHackathonInterface = z.infer<typeof CreateHackathonSchema>
+export type HackathonConfigInterface = z.infer<typeof HackathonConfigSchema>

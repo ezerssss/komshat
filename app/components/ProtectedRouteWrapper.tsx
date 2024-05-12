@@ -12,10 +12,12 @@ import GoogleIcon from '../icons/GoogleIcon'
 interface PropsInterface {
     children: React.ReactNode
     delay?: boolean
+    admin?: boolean
 }
 
 function ProtectedRouteWrapper(props: PropsInterface) {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
     const { signIn, isLoading: isSigningIn } = useLogin()
@@ -27,12 +29,43 @@ function ProtectedRouteWrapper(props: PropsInterface) {
             }
 
             setIsAuthenticated(!!user)
+
+            if (user) {
+                const tokens = await user.getIdTokenResult()
+
+                if (tokens.claims.admin) {
+                    const hasAdminClaim = tokens.claims.admin as boolean
+
+                    setIsAdmin(hasAdminClaim)
+                } else {
+                    setIsAdmin(false)
+                }
+            } else {
+                setIsAdmin(false)
+            }
+
             setIsLoading(false)
         })
     }, [props.delay])
 
-    const content: JSX.Element = isAuthenticated ? (
+    const adminContent = isAdmin ? (
         <>{props.children}</>
+    ) : (
+        <div className="flex h-[80svh] flex-col items-center justify-center">
+            <p className="mt-4 text-sm text-gray-400">
+                You do not have sufficient permissions to access this page 😡
+            </p>
+        </div>
+    )
+
+    const content: JSX.Element = props.admin ? (
+        adminContent
+    ) : (
+        <>{props.children}</>
+    )
+
+    const authCheck: JSX.Element = isAuthenticated ? (
+        content
     ) : (
         <div className="flex h-[80svh] flex-col items-center justify-center">
             <Button
@@ -61,7 +94,7 @@ function ProtectedRouteWrapper(props: PropsInterface) {
             <p className="mt-2 text-sm text-gray-400">Authenticating</p>
         </div>
     ) : (
-        content
+        authCheck
     )
 }
 
