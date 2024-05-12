@@ -55,8 +55,8 @@ export async function generateMetadata(
 
 function page({ params }: { params: { hackathonID: string } }) {
     return (
-        <main className="px-5 pb-20 pt-10 sm:px-14">
-            <main className="flex items-center gap-20 overflow-hidden px-5 pb-20 pt-10 sm:px-14">
+        <>
+            <main className="flex items-center gap-20 overflow-hidden px-5 pb-20 sm:px-14">
                 <div className="min-w-[50%]">
                     <Theme hackathonID={params.hackathonID} />
                 </div>
@@ -65,7 +65,7 @@ function page({ params }: { params: { hackathonID: string } }) {
                 </aside>
             </main>
             <Participants hackathonID={params.hackathonID} />
-        </main>
+        </>
     )
 }
 

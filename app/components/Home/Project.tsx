@@ -51,7 +51,7 @@ function Project(props: PropsInterface) {
     const [projectURL, setProjectURL] = useState('')
     const { heartsState, handleHeart, isLikeable, isHearted } = useLike(props)
 
-    const projectRef = useRef<HTMLElement>(null)
+    const projectRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (window !== undefined) {
@@ -92,7 +92,6 @@ function Project(props: PropsInterface) {
     return (
         <article
             id={projectID}
-            ref={projectRef}
             className="relative my-6 block max-w-[800px] rounded-md border-[1px] border-[#E5E7EB] shadow-md"
         >
             <section className="flex items-center gap-4 p-4">
@@ -148,7 +147,10 @@ function Project(props: PropsInterface) {
                     </PhotoProvider>
                 </section>
             </div>
-            <div className="my-3.5 mb-6 mt-[34px] flex items-center gap-10 px-6 text-sm sm:px-14 sm:text-base">
+            <div
+                className="my-3.5 mb-6 mt-[34px] flex items-center gap-10 px-6 text-sm sm:px-14 sm:text-base"
+                ref={projectRef}
+            >
                 <button
                     className="flex items-center gap-2"
                     disabled={!isLikeable}
