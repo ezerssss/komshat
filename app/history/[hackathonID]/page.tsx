@@ -5,9 +5,16 @@ import db from '@/app/firebase/db'
 import { HackathonInterface } from '@/app/types/HackathonInterface'
 import { collection, query, where, limit, getDocs } from 'firebase/firestore'
 import { ResolvingMetadata, Metadata } from 'next'
+import { ProjectInterface } from '@/app/types/ProjectInterface'
 
 export async function generateMetadata(
-    { params }: { params: { hackathonID: string } },
+    {
+        params,
+        searchParams,
+    }: {
+        params: { hackathonID: string }
+        searchParams: { [key: string]: string | string[] | undefined }
+    },
     parent: ResolvingMetadata
 ): Promise<Metadata> {
     if (!params.hackathonID) {
@@ -31,6 +38,43 @@ export async function generateMetadata(
     }
 
     const hackathon = results.docs[0].data() as HackathonInterface
+
+    if (searchParams.projectID) {
+        const projectsCollectionRef = collection(db, 'projects')
+
+        const projectQuery = query(
+            projectsCollectionRef,
+            where('hackathonID', '==', hackathonID),
+            where('projectID', '==', searchParams.projectID),
+            limit(1)
+        )
+
+        const projectResult = await getDocs(projectQuery)
+
+        if (!projectResult.empty) {
+            const project = results.docs[0].data() as ProjectInterface
+
+            return {
+                title: project.title,
+                description: project.description,
+                openGraph: {
+                    title: project.title,
+                    description: project.description,
+                    siteName: 'komshat',
+                    type: 'article',
+                    images: [
+                        {
+                            url: project.images[0].url,
+                        },
+                    ],
+                    locale: 'en_US',
+                },
+                icons: {
+                    icon: '/icon.png',
+                },
+            }
+        }
+    }
 
     return {
         title: hackathon.theme,
