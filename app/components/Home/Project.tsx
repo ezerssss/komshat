@@ -62,7 +62,8 @@ function Project(props: PropsInterface) {
         }
     }, [projectID, hackathonID])
 
-    const heartStyle = isHearted ? 'red' : 'white'
+    const heartFillStyle = isHearted ? 'red' : 'white'
+    const heartBorderStyle = isHearted ? 'red' : 'black'
 
     async function handleOnCopy() {
         toast.info('Copied shareable link to clipboard.')
@@ -152,7 +153,8 @@ function Project(props: PropsInterface) {
                 >
                     <Heart
                         className="w-34"
-                        fill={!isLikeable ? 'gray' : heartStyle}
+                        fill={!isLikeable ? 'gray' : heartFillStyle}
+                        color={!isLikeable ? 'gray' : heartBorderStyle}
                     />
                     {heartsState}
                 </button>
