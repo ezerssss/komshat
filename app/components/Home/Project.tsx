@@ -48,6 +48,7 @@ function Project(props: PropsInterface) {
 
     const searchParams = useSearchParams()
 
+    const [areImagesLoaded, setAreImagesLoaded] = useState(false)
     const [projectURL, setProjectURL] = useState('')
     const { heartsState, handleHeart, isLikeable, isHearted } = useLike(props)
 
@@ -74,18 +75,14 @@ function Project(props: PropsInterface) {
     }
 
     useEffect(() => {
-        if (window === undefined || !searchParams?.get('projectID')) {
-            return
-        }
-
-        if (!projectRef.current) {
+        if (!areImagesLoaded) {
             return
         }
 
         if (projectID === searchParams.get('projectID')) {
-            projectRef.current.scrollIntoView({ behavior: 'smooth' })
+            projectRef?.current?.scrollIntoView({ behavior: 'smooth' })
         }
-    }, [projectID, projectRef, searchParams])
+    }, [projectRef, projectID, searchParams, areImagesLoaded])
 
     let teamNameSanitized = sanitizeString(teamName.replace('Team', ''))
 
@@ -108,7 +105,7 @@ function Project(props: PropsInterface) {
                     </p>
                 </div>
             </section>
-            <div className="px-6 sm:px-16">
+            <div className="px-6 sm:px-16" ref={projectRef}>
                 <section className="mb-3.5 mt-9">
                     <h3 className="mb-1.5 text-xl font-semibold sm:text-2xl">
                         {sanitizeString(title)}
@@ -131,14 +128,14 @@ function Project(props: PropsInterface) {
                             {images.map(({ url }, index) => (
                                 <PhotoView key={url} src={url}>
                                     <div className="flex h-full cursor-pointer items-center justify-center bg-black">
-                                        <Image
-                                            width="0"
-                                            height="0"
-                                            sizes="100vw"
-                                            quality={95}
+                                        <img
+                                            width="100%"
                                             className="h-auto w-auto object-contain shadow-md"
                                             alt={`${url}/${index}`}
                                             src={url}
+                                            onLoad={() =>
+                                                setAreImagesLoaded(true)
+                                            }
                                         />
                                     </div>
                                 </PhotoView>
@@ -147,10 +144,7 @@ function Project(props: PropsInterface) {
                     </PhotoProvider>
                 </section>
             </div>
-            <div
-                className="my-3.5 mb-6 mt-[34px] flex items-center gap-10 px-6 text-sm sm:px-14 sm:text-base"
-                ref={projectRef}
-            >
+            <div className="my-3.5 mb-6 mt-[34px] flex items-center gap-10 px-6 text-sm sm:px-14 sm:text-base">
                 <button
                     className="flex items-center gap-2"
                     disabled={!isLikeable}

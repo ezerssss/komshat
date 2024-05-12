@@ -52,7 +52,7 @@ export async function generateMetadata(
         const projectResult = await getDocs(projectQuery)
 
         if (!projectResult.empty) {
-            const project = results.docs[0].data() as ProjectInterface
+            const project = projectResult.docs[0].data() as ProjectInterface
 
             return {
                 title: project.title,
