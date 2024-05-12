@@ -7,6 +7,11 @@ import { genericMetadata } from '../constants/metadata'
 export const metadata: Metadata = {
     ...genericMetadata,
     title: 'komshat | Submit a project',
+    openGraph: {
+        ...genericMetadata.openGraph,
+        title: 'komshat | Submit a project',
+        description: "Submit a project for this weeek's hackathon",
+    },
 }
 
 function Submit() {

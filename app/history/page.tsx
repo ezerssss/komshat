@@ -5,6 +5,11 @@ import HistoryClient from '../components/History/HistoryClient'
 export const metadata: Metadata = {
     ...genericMetadata,
     title: 'komshat | Previous hackathons',
+    openGraph: {
+        ...genericMetadata.openGraph,
+        title: 'komshat | Previous hackathons',
+        description: 'Browse previous hackathons',
+    },
 }
 
 function History() {
