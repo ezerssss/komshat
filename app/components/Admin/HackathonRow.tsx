@@ -21,7 +21,11 @@ import { toastError } from '@/lib/utils'
 import { deleteHackathon } from '@/app/firebase/functions'
 import { toast } from 'sonner'
 
-function HackathonRow(props: HackathonInterface) {
+interface PropsInterface extends HackathonInterface {
+    setSelectedHackathon: React.Dispatch<React.SetStateAction<string>>
+}
+
+function HackathonRow(props: PropsInterface) {
     const {
         hackathonID,
         dateEnd,
@@ -32,6 +36,7 @@ function HackathonRow(props: HackathonInterface) {
         theme,
         description,
         ideas,
+        setSelectedHackathon,
     } = props
 
     const [isDeleting, setIsDeleting] = useState(false)
@@ -39,7 +44,7 @@ function HackathonRow(props: HackathonInterface) {
     async function handleDelete() {
         Swal.fire({
             title: 'Confirm Deletion',
-            text: 'This is a destructive operation. You will NOT be able to recover this hackathon. Continue action?',
+            text: 'This is a destructive operation. You will NOT be able to recover this deletion. Continue action?',
             showCancelButton: true,
             showConfirmButton: true,
             confirmButtonText: 'Continue',
@@ -101,6 +106,13 @@ function HackathonRow(props: HackathonInterface) {
                 ))}
             </ul>
             <div className="flex flex-col items-center gap-1">
+                <Button
+                    variant="outline"
+                    className="h-[35px] w-[60px] text-xs"
+                    onClick={() => setSelectedHackathon(hackathonID)}
+                >
+                    Select
+                </Button>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button className="h-[35px] w-[60px] text-xs">

@@ -3,15 +3,20 @@
 import useAdmin from '@/app/hooks/useAdmin'
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import React from 'react'
+import React, { useState } from 'react'
 import { ScaleLoader } from 'react-spinners'
 import HackathonRow from './HackathonRow'
+import ParticipanProjectList from './ParticipantProjectList'
 
 function List() {
-    const { hackathons, isHackathonsLoading } = useAdmin({ configOnly: false })
+    const { hackathons, isHackathonsLoading } = useAdmin({
+        getHackathons: true,
+    })
+
+    const [selectedHackathon, setSelectedHackathon] = useState('')
 
     return (
-        <>
+        <div className="space-y-10">
             <section className="space-y-4">
                 <h2 className="text-2xl font-extrabold">Hackathons list</h2>
                 <Card className="overflow-x-auto">
@@ -35,12 +40,14 @@ function List() {
                             <HackathonRow
                                 key={hackathon.hackathonID}
                                 {...hackathon}
+                                setSelectedHackathon={setSelectedHackathon}
                             />
                         ))}
                     </div>
                 </Card>
             </section>
-        </>
+            <ParticipanProjectList selectedHackathon={selectedHackathon} />
+        </div>
     )
 }
 

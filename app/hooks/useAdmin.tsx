@@ -3,7 +3,14 @@ import {
     HackathonConfigInterface,
     HackathonInterface,
 } from '../types/HackathonInterface'
-import { collection, doc, onSnapshot, orderBy, query } from 'firebase/firestore'
+import {
+    collection,
+    doc,
+    onSnapshot,
+    orderBy,
+    query,
+    where,
+} from 'firebase/firestore'
 import db from '../firebase/db'
 import { ParticipantInterface } from '../types/ParticipantInterface'
 import { ProjectInterface } from '../types/ProjectInterface'
@@ -15,7 +22,21 @@ const hackathonCollectionRef = collection(db, 'hackathons')
 const participantsCollectionRef = collection(db, 'participants')
 const projectsCollectionRef = collection(db, 'projects')
 
-function useAdmin({ configOnly = false }) {
+interface ParamterInterface {
+    getConfig?: boolean
+    getHackathons?: boolean
+    hackathonID?: string
+    getParticipants?: boolean
+    getProjects?: boolean
+}
+
+function useAdmin({
+    getConfig,
+    getHackathons,
+    hackathonID,
+    getParticipants,
+    getProjects,
+}: ParamterInterface) {
     const [hackathonConfig, setHackathonConfig] =
         useState<HackathonConfigInterface>()
 
@@ -29,6 +50,10 @@ function useAdmin({ configOnly = false }) {
     const [isProjectsLoading, setIsProjectsLoading] = useState(true)
 
     useEffect(() => {
+        if (!getConfig) {
+            return
+        }
+
         const unsub = onSnapshot(hackathonConfigDocRef, (doc) => {
             const config = doc.data() as HackathonConfigInterface
 
@@ -36,10 +61,10 @@ function useAdmin({ configOnly = false }) {
         })
 
         return () => unsub()
-    }, [])
+    }, [getConfig])
 
     useEffect(() => {
-        if (configOnly) {
+        if (!getHackathons) {
             return
         }
 
@@ -61,16 +86,16 @@ function useAdmin({ configOnly = false }) {
         })
 
         return () => unsub()
-    }, [configOnly])
+    }, [getHackathons])
 
     useEffect(() => {
-        if (configOnly) {
+        if (!getParticipants || !hackathonID) {
             return
         }
 
         const participantsQuery = query(
             participantsCollectionRef,
-            orderBy('hackathonID')
+            where('hackathonID', '==', hackathonID)
         )
 
         const unsub = onSnapshot(participantsQuery, (query) => {
@@ -86,16 +111,16 @@ function useAdmin({ configOnly = false }) {
         })
 
         return () => unsub()
-    }, [configOnly])
+    }, [getParticipants, hackathonID])
 
     useEffect(() => {
-        if (configOnly) {
+        if (!getProjects || !hackathonID) {
             return
         }
 
         const projectsCollectionQuery = query(
             projectsCollectionRef,
-            orderBy('hackathonID')
+            where('hackathonID', '==', hackathonID)
         )
 
         const unsub = onSnapshot(projectsCollectionQuery, (query) => {
@@ -111,7 +136,7 @@ function useAdmin({ configOnly = false }) {
         })
 
         return () => unsub()
-    }, [configOnly])
+    }, [getProjects, hackathonID])
 
     return {
         hackathonConfig,

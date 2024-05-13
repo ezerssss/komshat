@@ -50,3 +50,13 @@ export const deleteHackathon = httpsCallable<{ hackathonID: string }, never>(
     functions,
     'deleteHackathon'
 )
+
+export const deleteParticipant = httpsCallable<
+    { hackathonID: string; captainID: string },
+    never
+>(functions, 'deleteParticipant')
+
+export const deleteProject = httpsCallable<{ projectID: string }, never>(
+    functions,
+    'deleteProject'
+)

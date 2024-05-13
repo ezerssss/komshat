@@ -15,7 +15,7 @@ import StartDay from './StartDay'
 import StartHour from './StartHour'
 
 function HackathonConfig() {
-    const { hackathonConfig } = useAdmin({ configOnly: true })
+    const { hackathonConfig } = useAdmin({ getConfig: true })
 
     const [autoGenerateTheme, setAutoGenerateTheme] = useState(true)
     const [startDay, setStartDay] = useState(5)
