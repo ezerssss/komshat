@@ -1,3 +1,5 @@
+// this is a war crime component im so sorry
+
 import {
     EditHackathonInterface,
     EditHackathonSchema,
@@ -31,6 +33,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toastError } from '@/lib/utils'
 import { editHackathon } from '@/app/firebase/functions'
 import { toast } from 'sonner'
+import { Slider } from '@/components/ui/slider'
 
 function EditForm(props: HackathonInterface) {
     const { dateEnd, dateStart, dateSubmissionEnd, dateVotingEnd } = props
@@ -66,6 +69,38 @@ function EditForm(props: HackathonInterface) {
         e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
     ) {
         e.key === 'Enter' && e.preventDefault()
+    }
+
+    // im feeling risky MAKE IT ANY!!!
+    function renderSliderForHour(field: any) {
+        return (
+            <div className="mb-3 space-y-2 p-3">
+                <div className="flex gap-2">
+                    <p className="text-sm">Set Hour: </p>
+                    <p className="text-sm text-gray-400">
+                        {String(new Date(field.value).getHours()).padStart(
+                            2,
+                            '0'
+                        )}
+                        :00
+                    </p>
+                </div>
+                <Slider
+                    defaultValue={[0]}
+                    value={[new Date(field.value).getHours()]}
+                    onValueChange={(value) => {
+                        const updatedDate = new Date(field.value)
+                        updatedDate.setHours(value[0])
+
+                        field.onChange(updatedDate.getTime())
+                    }}
+                    max={23}
+                    min={0}
+                    step={1}
+                    className="cursor-pointer"
+                />
+            </div>
+        )
     }
 
     return (
@@ -117,6 +152,7 @@ function EditForm(props: HackathonInterface) {
                                                     )
                                                 }
                                             />
+                                            {renderSliderForHour(field)}
                                         </PopoverContent>
                                     </Popover>
                                 </FormControl>
@@ -164,6 +200,7 @@ function EditForm(props: HackathonInterface) {
                                                     )
                                                 }
                                             />
+                                            {renderSliderForHour(field)}
                                         </PopoverContent>
                                     </Popover>
                                 </FormControl>
@@ -219,6 +256,7 @@ function EditForm(props: HackathonInterface) {
                                                         )
                                                 }
                                             />
+                                            {renderSliderForHour(field)}
                                         </PopoverContent>
                                     </Popover>
                                 </FormControl>
@@ -272,6 +310,7 @@ function EditForm(props: HackathonInterface) {
                                                         )
                                                 }
                                             />
+                                            {renderSliderForHour(field)}
                                         </PopoverContent>
                                     </Popover>
                                 </FormControl>
