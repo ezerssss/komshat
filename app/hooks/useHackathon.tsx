@@ -3,6 +3,7 @@ import { HackathonInterface } from '../types/HackathonInterface'
 import {
     DocumentData,
     QuerySnapshot,
+    Timestamp,
     collection,
     getDocs,
     limit,
@@ -80,11 +81,25 @@ function useHackathon(id: string = '') {
 
             const latestQuery = query(
                 hackathonsCollectionRef,
+                where('dateStart', '<=', Timestamp.now()),
+                where('dateEnd', '>', Timestamp.now()),
                 orderBy('dateStart', 'desc'),
                 limit(1)
             )
 
-            const results = await getDocs(latestQuery)
+            let results = await getDocs(latestQuery)
+
+            if (results.empty) {
+                const modifiedQuery = query(
+                    hackathonsCollectionRef,
+                    where('dateEnd', '<=', Timestamp.now()),
+                    orderBy('dateEnd', 'desc'),
+                    limit(1)
+                )
+
+                results = await getDocs(modifiedQuery)
+            }
+
             const latest = results.docs[0]
             const data = latest.data() as HackathonInterface
 

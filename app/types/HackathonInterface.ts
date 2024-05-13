@@ -27,6 +27,7 @@ export type DurationInDaysInterface = {
 }
 
 export const AdminCreateHackathonSchema = ThemeSchema.extend({
+    dateTimeNumber: z.number().min(0),
     startHour: z.number().min(0).max(23),
     durationInDays: z.object({
         recognition: z.number().min(1),

@@ -20,10 +20,15 @@ import { Input } from '@/components/ui/input'
 import { toastError } from '@/lib/utils'
 import { toast } from 'sonner'
 import { startHackathon } from '@/app/firebase/functions'
+import { format } from 'date-fns'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
+import { twMerge } from 'tailwind-merge'
 
 const today = new Date()
 
 function CreateHackathon() {
+    const [dateStart, setDateStart] = useState<Date>()
     const [startHour, setStartHour] = useState(0)
 
     const [duration, setDuration] = useState<DurationInDaysInterface>({
@@ -48,6 +53,7 @@ function CreateHackathon() {
                 ideas,
                 startHour,
                 durationInDays: duration,
+                ...(dateStart && { dateTimeNumber: dateStart.getTime() }),
             }
 
             const { success, data } =
@@ -62,6 +68,17 @@ function CreateHackathon() {
             }
 
             await startHackathon(data)
+
+            setDateStart(undefined)
+            setStartHour(0)
+            setTheme('')
+            setDescription('')
+            setIdeas(['', '', ''])
+            setDuration({
+                recognition: 1,
+                submission: 3,
+                voting: 3,
+            })
             toast.success('Successfully created hackathon.')
         } catch (error) {
             toastError(error)
@@ -80,12 +97,38 @@ function CreateHackathon() {
                     </PopoverTrigger>
                     <PopoverContent className="w-[300px]">
                         <p className="text-sm">
-                            Starting a hackathon will override the currently
-                            running hackathon.
+                            Starting a hackathon at a specified date will
+                            override the running hackathon at that date.
                         </p>
                     </PopoverContent>
                 </Popover>
             </div>
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button
+                        variant={'outline'}
+                        className={twMerge(
+                            'w-[280px] justify-start text-left font-normal',
+                            !dateStart && 'text-muted-foreground'
+                        )}
+                    >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {dateStart ? (
+                            format(dateStart, 'PPP')
+                        ) : (
+                            <span>Choose starting date</span>
+                        )}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                    <Calendar
+                        mode="single"
+                        selected={dateStart}
+                        onSelect={setDateStart}
+                        disabled={{ before: today }}
+                    />
+                </PopoverContent>
+            </Popover>
             <div className="max-w-[500px] space-y-6">
                 <StartHour startHour={startHour} setStartHour={setStartHour} />
                 <Duration durationInDays={duration} setDuration={setDuration} />
