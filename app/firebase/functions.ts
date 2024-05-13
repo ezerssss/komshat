@@ -4,7 +4,9 @@ import { JoinInterface } from '../types/ParticipantInterface'
 import { SubmitProjectFormInterface } from '../types/ProjectInterface'
 import {
     AdminCreateHackathonInterface,
+    EditHackathonInterface,
     HackathonConfigInterface,
+    HackathonInterface,
 } from '../types/HackathonInterface'
 
 const functions = getFunctions(app, 'asia-southeast1')
@@ -38,3 +40,13 @@ export const startHackathon = httpsCallable<
     AdminCreateHackathonInterface,
     never
 >(functions, 'startHackathon')
+
+export const editHackathon = httpsCallable<EditHackathonInterface, never>(
+    functions,
+    'editHackathon'
+)
+
+export const deleteHackathon = httpsCallable<{ hackathonID: string }, never>(
+    functions,
+    'deleteHackathon'
+)

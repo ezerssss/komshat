@@ -10,7 +10,7 @@ export const ThemeSchema = z.object({
 export type ThemeInterface = z.infer<typeof ThemeSchema>
 
 export const HackathonSchema = ThemeSchema.extend({
-    hackathonID: z.string().uuid(),
+    hackathonID: z.string().min(1),
     dateStart: z.instanceof(Timestamp),
     dateEnd: z.instanceof(Timestamp),
     dateSubmissionEnd: z.instanceof(Timestamp),
@@ -39,6 +39,69 @@ export const AdminCreateHackathonSchema = ThemeSchema.extend({
 export type AdminCreateHackathonInterface = z.infer<
     typeof AdminCreateHackathonSchema
 >
+
+export const EditHackathonSchema = HackathonSchema.extend({
+    dateStart: z.number().min(0),
+    dateEnd: z.number().min(0),
+    dateSubmissionEnd: z.number().min(0),
+    dateVotingEnd: z.number().min(0),
+}).superRefine((data, ctx) => {
+    if (data.dateStart >= data.dateEnd) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+                'Invalid starting and end date. Starting date should be earlier than end date.',
+            path: ['dateStart', 'dateEnd'],
+        })
+    }
+
+    if (data.dateSubmissionEnd >= data.dateVotingEnd) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+                'Invalid submission and voting end date. Submission end date should be earlier than voting end date.',
+            path: ['dateSubmissionEnd', 'dateVotingEnd'],
+        })
+    }
+
+    if (data.dateSubmissionEnd <= data.dateStart) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+                'Invalid submission and start date. Submission end date should be later than starting date.',
+            path: ['dateSubmissionEnd', 'dateStart'],
+        })
+    }
+
+    if (data.dateVotingEnd <= data.dateStart) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+                'Invalid end voting and start date. Voting end date should be later than starting date.',
+            path: ['dateVotingEnd', 'dateStart'],
+        })
+    }
+
+    if (data.dateSubmissionEnd >= data.dateEnd) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+                'Invalid submission and end date. Submission end date should be earlier than end date.',
+            path: ['dateSubmissionEnd', 'dateEnd'],
+        })
+    }
+
+    if (data.dateVotingEnd >= data.dateEnd) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+                'Invalid end voting and end date. Voting end date should be earlier than end date.',
+            path: ['dateVotingEnd', 'dateEnd'],
+        })
+    }
+})
+
+export type EditHackathonInterface = z.infer<typeof EditHackathonSchema>
 
 export const HackathonConfigSchema = z.object({
     durationInDays: z.object({

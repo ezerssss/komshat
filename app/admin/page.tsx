@@ -1,6 +1,8 @@
 import ProtectedRouteWrapper from '../components/ProtectedRouteWrapper'
 import HackathonConfig from '../components/Admin/HackathonConfig'
 import CreateHackathon from '../components/Admin/CreateHackathon'
+import { Separator } from '@/components/ui/separator'
+import List from '../components/Admin/List'
 
 function Admin() {
     return (
@@ -13,6 +15,8 @@ function Admin() {
                     <HackathonConfig />
                     <CreateHackathon />
                 </div>
+                <Separator className="my-10" />
+                <List />
             </main>
         </ProtectedRouteWrapper>
     )
