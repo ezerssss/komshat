@@ -30,7 +30,7 @@ function useHistory() {
                 const totalCountQuery = query(
                     hackathonsCollectionRef,
                     where('dateEnd', '<', Timestamp.now()),
-                    orderBy('dateEnd', 'desc')
+                    orderBy('dateEnd', 'asc')
                 )
 
                 promises.push(getCountFromServer(totalCountQuery))
@@ -38,7 +38,7 @@ function useHistory() {
                 const paginatedQuery = query(
                     hackathonsCollectionRef,
                     where('dateEnd', '<', Timestamp.now()),
-                    orderBy('dateEnd', 'desc'),
+                    orderBy('dateEnd', 'asc'),
                     limit(10)
                 )
 
@@ -74,7 +74,7 @@ function useHistory() {
             setIsLoading(true)
             const q = query(
                 hackathonsCollectionRef,
-                orderBy('dateEnd', 'desc'),
+                orderBy('dateEnd', 'asc'),
                 startAfter(hackathons.length),
                 limit(10)
             )
