@@ -40,6 +40,10 @@ function HackathonConfig() {
         }
     }, [hackathonConfig?.durationInDays])
 
+    useEffect(() => {
+        setAutoGenerateTheme(!!hackathonConfig?.autoGenerateTheme)
+    }, [hackathonConfig?.autoGenerateTheme])
+
     async function handleConfig() {
         try {
             setIsConfigSaving(true)
