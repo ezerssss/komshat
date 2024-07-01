@@ -6,11 +6,11 @@ import { genericMetadata } from '../constants/metadata'
 
 export const metadata: Metadata = {
     ...genericMetadata,
-    title: "komshat | Join this week's hackathon",
+    title: 'komshat | Join this hackathon',
     openGraph: {
         ...genericMetadata.openGraph,
-        title: "komshat | Join this week's hackathon",
-        description: "Join this weeek's hackathon",
+        title: 'komshat | Join this hackathon',
+        description: 'Join this hackathon',
     },
 }
 

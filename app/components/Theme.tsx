@@ -41,7 +41,7 @@ function Theme(props: PropsInterface) {
                     {!props.hackathonID && (
                         <div className="mb-2 flex items-center gap-1">
                             <p className="text-gray-400">
-                                This week&apos;s theme:
+                                This hackathon&apos;s theme:
                             </p>
                             {!isLoading && (
                                 <Popover>

@@ -68,9 +68,8 @@ function ProfileSheet(props: Readonly<PropsInterface>) {
                         <SheetHeader>
                             <SheetTitle>Sign In</SheetTitle>
                             <SheetDescription>
-                                You are not currently logged in. To join this
-                                week&apos;s hackathon, please sign in with your
-                                UP email.
+                                You are not currently logged in. To join a
+                                hackathon, please sign in with your UP email.
                             </SheetDescription>
                         </SheetHeader>
                         <Button

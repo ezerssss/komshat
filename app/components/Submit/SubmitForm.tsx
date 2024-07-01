@@ -101,7 +101,7 @@ function SubmitForm() {
 
             Swal.fire({
                 title: 'Congratulations!',
-                html: "You have successfully submitted your project for this week's hackathon. You can now relax knowing you created a beautiful project. Encourage other people to join by sharing your project!",
+                html: 'You have successfully submitted your project for this hackathon. You can now relax knowing you created a beautiful project. Encourage other people to join by sharing your project!',
                 confirmButtonText: 'Thanks',
                 ...sweetAlertConfigNoCancel,
             })
@@ -381,7 +381,7 @@ function SubmitForm() {
                 <div className="mt-3 w-full text-center text-xs text-gray-400">
                     <p>
                         It seems that you are not yet registered to this
-                        week&apos;s hackathon.
+                        hackathon.
                     </p>
                     <Link href="/join" className="underline">
                         Register instead?

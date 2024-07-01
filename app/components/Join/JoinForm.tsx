@@ -102,7 +102,7 @@ function JoinForm() {
 
             Swal.fire({
                 title: 'Hooray!',
-                html: "You have successfully joined this week's hackathon. Don't forget to <a href='/submit' class='underline'>submit</a> your project before the deadline ends.",
+                html: "You have successfully joined this hackathon. Don't forget to <a href='/submit' class='underline'>submit</a> your project before the deadline ends.",
                 confirmButtonText: 'Got it',
                 ...sweetAlertConfigNoCancel,
             })

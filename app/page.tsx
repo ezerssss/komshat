@@ -60,7 +60,7 @@ export default function Home() {
             <main className="flex items-center gap-20 overflow-hidden px-5 pb-20 pt-10 sm:px-14">
                 <div className="min-w-[50%]">
                     <h1 className="text-4xl font-bold sm:text-5xl">
-                        Weekly Hackathons
+                        Komshat Hackathons
                     </h1>
                     <Theme />
                     <HackathonButtons />

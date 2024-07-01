@@ -3,11 +3,11 @@ import { Metadata } from 'next'
 export const genericMetadata: Metadata = {
     title: 'komshat',
     description:
-        'Weekly hackathon challenge! Build and create projects based around an automatically generated theme.',
+        'Comsci hackathon challenge! Build and create projects based around an automatically generated theme.',
     openGraph: {
         title: 'komshat',
         description:
-            'Weekly hackathon challenge! Build and create projects based around an automatically generated theme.',
+            'Comsci hackathon challenge! Build and create projects based around an automatically generated theme.',
         siteName: 'komshat',
         type: 'article',
         images: [
