@@ -62,11 +62,28 @@ export default function Home() {
                     <h1 className="text-4xl font-bold sm:text-5xl">
                         Komshat Hackathons
                     </h1>
+                    <p className="mt-2 text-sm">
+                        Hosted by{' '}
+                        <span className="underline">
+                            <a
+                                className="mv-org"
+                                target="_blank"
+                                href="https://github.com/Miagao-Valley/"
+                            >
+                                Miagao Valley
+                            </a>
+                        </span>
+                    </p>
                     <Theme />
                     <HackathonButtons />
                 </div>
-                <aside className="marquee hidden max-h-[500px] flex-1 items-center overflow-hidden text-[500px] font-extrabold lg:flex">
-                    <p>komshat</p>
+                <aside className="marquee hidden max-h-[500px] flex-1 items-center overflow-hidden text-[400px] font-extrabold lg:flex">
+                    <div className="flex gap-x-20">
+                        <p>komshat</p>
+                        <p>x</p>
+                        <p className="mv-org">miagao</p>
+                        <p className="mv-org">valley</p>
+                    </div>
                 </aside>
             </main>
             <Participants />
