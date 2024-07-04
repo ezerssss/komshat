@@ -78,11 +78,11 @@ export default function Home() {
                     <HackathonButtons />
                 </div>
                 <aside className="marquee hidden max-h-[500px] flex-1 items-center overflow-hidden text-[400px] font-extrabold lg:flex">
-                    <div className="flex gap-x-20">
+                    <div className="flex gap-x-20 mv-org">
                         <p>komshat</p>
                         <p>x</p>
-                        <p className="mv-org">miagao</p>
-                        <p className="mv-org">valley</p>
+                        <p>miagao</p>
+                        <p>valley</p>
                     </div>
                 </aside>
             </main>
