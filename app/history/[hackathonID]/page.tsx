@@ -104,8 +104,13 @@ function page({ params }: { params: { hackathonID: string } }) {
                 <div className="min-w-[50%]">
                     <Theme hackathonID={params.hackathonID} />
                 </div>
-                <aside className="marquee hidden max-h-[500px] flex-1 items-center overflow-hidden text-[500px] font-extrabold lg:flex">
-                    <p>komshat</p>
+                <aside className="marquee hidden max-h-[500px] flex-1 items-center overflow-hidden text-[400px] font-extrabold lg:flex">
+                    <div className="mv-org flex gap-x-20">
+                        <p>komshat</p>
+                        <p>x</p>
+                        <p>miagao</p>
+                        <p>valley</p>
+                    </div>
                 </aside>
             </main>
             <Participants hackathonID={params.hackathonID} />
