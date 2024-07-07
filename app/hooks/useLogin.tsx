@@ -7,6 +7,7 @@ import auth from '../firebase/auth'
 import { analytics } from '../firebase/firebase'
 
 const provider = new GoogleAuthProvider()
+provider.setCustomParameters({ hd: 'up.edu.ph' })
 
 function useLogin(callback?: () => void) {
     const [isLoading, setIsLoading] = useState(false)
