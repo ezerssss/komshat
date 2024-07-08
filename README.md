@@ -10,31 +10,27 @@
 ## Tech Stack
 
 -   **Frontend**: Next.js, Tailwind CSS, `shadcn/ui` components.
--   **Backend**: Firebase Cloud Functions, Firestore for database operations.
+-   **Backend**: Firebase Cloud Functions, Firestore for database operations, Google Cloud Sheduler for Cron jobs, Google Cloud Tasks Services.
 -   **Authentication**: Firebase Authentication for secure user management.
 -   **Storage**: Firebase Storage for managing project uploads.
--   **AI Integration**: OpenAI for theme generation.
+-   **AI Integration**: OpenAI API for theme generation.
 
 ## Contributing
 
 Contributions to **Komshat** are encouraged! If you have ideas for enhancements, feature requests, or bug fixes:
 
 1. Fork the repository.
-2. Clone the forked repository to your local machine.
-    ```bash
-    git clone https://github.com/ezerssss/komshat.git
-    ```
-3. Create a new branch for your feature or bug fix:
+2. Create a new branch for your feature or bug fix:
     ```bash
     git checkout -b feature-name
     ```
-4. Make changes, commit, and push to your branch:
+3. Make changes, commit, and push to your branch:
     ```bash
     git add .
     git commit -m "[Your Name][Feature] Description"
     git push origin feature-name
     ```
-5. Open a pull request to merge your changes into the main repository.
+4. Open a pull request to merge your changes into the main repository.
 
 ## Issues
 
