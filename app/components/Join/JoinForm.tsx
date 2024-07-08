@@ -30,6 +30,7 @@ import sweetAlertConfig, {
 import { analytics } from '@/app/firebase/firebase'
 import { logEvent } from 'firebase/analytics'
 import useUser from '@/app/hooks/useUser'
+import { useRouter } from 'next/navigation'
 
 function JoinForm() {
     const user = useUser()
@@ -48,6 +49,8 @@ function JoinForm() {
         progress,
         error: imageError,
     } = useUpload()
+
+    const router = useRouter()
 
     const [isJoining, setIsJoining] = useState(false)
 
@@ -103,7 +106,7 @@ function JoinForm() {
 
             form.reset()
 
-            Swal.fire({
+            const swalResult = await Swal.fire({
                 title: 'Hooray!',
                 html: "You have successfully joined this hackathon. Don't forget to <a href='/submit' class='underline'>submit</a> your project before the deadline ends.",
                 confirmButtonText: 'Got it',
@@ -111,6 +114,10 @@ function JoinForm() {
             })
 
             setIsParticipant(true)
+
+            if (swalResult.isConfirmed) {
+                router.push('/')
+            }
         } catch (error) {
             await deleteFromURL(teamPicture)
             toastError(error)
@@ -122,7 +129,7 @@ function JoinForm() {
     function onSubmit(values: z.infer<typeof JoinFormSchema>) {
         Swal.fire({
             title: 'Confirm details',
-            text: 'You will not be able to edit your team details after you confirm. This team will also be tied to your Google account. To join with a different team, you need to use another Google account.',
+            text: 'This team will be tied to your Google account. To join with a different team, you need to use another Google account.',
             showCancelButton: true,
             showConfirmButton: true,
             confirmButtonText: 'Confirm',
@@ -163,12 +170,18 @@ function JoinForm() {
                             <FormItem>
                                 <FormLabel>Team name</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        type="text"
-                                        placeholder="Enter name"
-                                        onKeyDown={(e) => checkKeyDown(e)}
-                                        {...field}
-                                    />
+                                    <div className="flex">
+                                        <div className="flex h-10 items-center justify-center rounded-l-lg border bg-gray-400 px-3 py-2 text-sm text-white">
+                                            Team
+                                        </div>
+                                        <Input
+                                            className="flex-1 rounded-l-none border-l-0"
+                                            type="text"
+                                            placeholder="Enter name"
+                                            onKeyDown={(e) => checkKeyDown(e)}
+                                            {...field}
+                                        />
+                                    </div>
                                 </FormControl>
                                 <FormDescription>
                                     This is your public team name.

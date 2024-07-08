@@ -33,6 +33,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { analytics } from '@/app/firebase/firebase'
 import { logEvent } from 'firebase/analytics'
 import useUser from '@/app/hooks/useUser'
+import { useRouter } from 'next/navigation'
 
 function SubmitForm() {
     const user = useUser()
@@ -51,6 +52,7 @@ function SubmitForm() {
         progress,
         error: imageError,
     } = useUpload()
+    const router = useRouter()
 
     const [imageFiles, setImageFiles] = useState<File[]>([])
     const [previewImageUrls, setPreviewImageUrls] = useState<string[]>([])
@@ -101,17 +103,20 @@ function SubmitForm() {
             const images = urls.map((url) => ({ url }))
 
             await submitProject({ ...values, images })
+            form.reset()
 
-            Swal.fire({
+            const swalResult = await Swal.fire({
                 title: 'Congratulations!',
                 html: 'You have successfully submitted your project for this hackathon. You can now relax knowing you created a beautiful project. Encourage other people to join by sharing your project!',
                 confirmButtonText: 'Thanks',
                 ...sweetAlertConfigNoCancel,
             })
 
-            form.reset()
-
             setHasSubmitted(true)
+
+            if (swalResult.isConfirmed) {
+                router.push('/')
+            }
         } catch (error) {
             toastError(error)
 
