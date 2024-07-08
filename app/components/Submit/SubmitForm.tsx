@@ -32,8 +32,10 @@ import { submitProject } from '@/app/firebase/functions'
 import { Textarea } from '@/components/ui/textarea'
 import { analytics } from '@/app/firebase/firebase'
 import { logEvent } from 'firebase/analytics'
+import useUser from '@/app/hooks/useUser'
 
 function SubmitForm() {
+    const user = useUser()
     const {
         isParticipant,
         hasSubmitted,
@@ -56,6 +58,7 @@ function SubmitForm() {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const disabled =
+        !user ||
         isUploading ||
         !isParticipant ||
         isSubmitting ||

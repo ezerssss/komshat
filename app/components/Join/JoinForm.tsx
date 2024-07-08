@@ -29,8 +29,10 @@ import sweetAlertConfig, {
 } from '@/app/constants/sweetAlert'
 import { analytics } from '@/app/firebase/firebase'
 import { logEvent } from 'firebase/analytics'
+import useUser from '@/app/hooks/useUser'
 
 function JoinForm() {
+    const user = useUser()
     const {
         isWithinDeadline,
         isParticipant,
@@ -52,6 +54,7 @@ function JoinForm() {
     const imageRef = useRef<HTMLInputElement | null>(null)
 
     const disabled =
+        !user ||
         !isWithinDeadline ||
         isUploading ||
         isJoining ||

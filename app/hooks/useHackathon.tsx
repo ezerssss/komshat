@@ -31,7 +31,6 @@ function useHackathon(id: string = '') {
     const currentDate = useMemo(() => new Date(), [])
     const isWithinDeadline: boolean = useMemo(
         () =>
-            !!user &&
             !!hackathon &&
             currentDate < hackathon.dateSubmissionEnd.toDate(),
         [hackathon, currentDate, user]
