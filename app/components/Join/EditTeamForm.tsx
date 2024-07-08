@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { joinHackathon } from '@/app/firebase/functions'
+import { editTeam } from '@/app/firebase/functions'
 import useHackathon from '@/app/hooks/useHackathon'
 import useUpload from '@/app/hooks/useUpload'
-import { JoinFormSchema } from '@/app/types/ParticipantInterface'
+import {
+    EditTeamFormSchema,
+    JoinFormSchema,
+} from '@/app/types/ParticipantInterface'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -20,128 +23,105 @@ import { Progress } from '@/components/ui/progress'
 import { toastError } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Swal from 'sweetalert2'
-import sweetAlertConfig, {
-    sweetAlertConfigNoCancel,
-} from '@/app/constants/sweetAlert'
 import { analytics } from '@/app/firebase/firebase'
 import { logEvent } from 'firebase/analytics'
 import useUser from '@/app/hooks/useUser'
-import { useRouter } from 'next/navigation'
-import { twMerge } from 'tailwind-merge'
+import useParticipant from '@/app/hooks/useParticipant'
+import { Skeleton } from '@/components/ui/skeleton'
+import { toast } from 'sonner'
 
-function JoinForm() {
+interface PropsInterface {
+    onClose: (
+        teamName: string,
+        teamPicture: string,
+        members: { name: string }[]
+    ) => void
+}
+
+function EditTeamForm(props: PropsInterface) {
+    const { onClose } = props
+
     const user = useUser()
-    const {
-        isWithinDeadline,
-        isParticipant,
-        isLoading,
-        setIsParticipant,
-        hackathon,
-        isChecking,
-    } = useHackathon()
+    const { hackathon } = useHackathon()
+    // No user id / hackathon id means no participant
+    const { participant, isLoading } = useParticipant(
+        user?.uid,
+        hackathon?.hackathonID
+    )
     const {
         uploadTeamPicture,
-        deleteFromURL,
         isUploading,
         progress,
         error: imageError,
     } = useUpload()
 
-    const router = useRouter()
-
-    const [isJoining, setIsJoining] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
 
     const imageRef = useRef<HTMLInputElement | null>(null)
     const imageDisplayRef = useRef<HTMLImageElement | null>(null)
 
-    const disabled =
-        !user ||
-        !isWithinDeadline ||
-        isUploading ||
-        isJoining ||
-        isParticipant ||
-        isLoading ||
-        isChecking
+    const disabled = !user || isUploading || isEditing || isLoading
 
-    const form = useForm<z.infer<typeof JoinFormSchema>>({
-        resolver: zodResolver(JoinFormSchema),
+    const form = useForm<z.infer<typeof EditTeamFormSchema>>({
+        resolver: zodResolver(EditTeamFormSchema),
         defaultValues: {
-            teamName: '',
+            teamName: '....',
             teamPicture: '',
-            members: [{ name: '' }],
+            members: [{ name: '....' }],
         },
         disabled: disabled,
     })
+
+    useEffect(() => {
+        if (!participant) {
+            return
+        }
+
+        form.setValue('members', participant.members)
+        form.setValue('teamName', participant.teamName)
+    }, [participant])
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: 'members',
     })
 
-    async function join(values: z.infer<typeof JoinFormSchema>) {
+    async function onSubmit(values: z.infer<typeof EditTeamFormSchema>) {
         const log = await analytics
         if (log) {
-            logEvent(log, 'join_hackathon', {
+            logEvent(log, 'edit_team', {
+                teamID: participant?.captainID ?? 'team-id',
                 hackathonID: hackathon?.hackathonID ?? 'hackathon-id',
             })
         }
 
-        if (!imageRef?.current?.files?.length) {
-            form.setError('teamPicture', {
-                type: 'custom',
-                message: 'File not found.',
-            })
+        if (!participant) {
             return
         }
 
-        const image = imageRef.current.files[0]
-        let teamPicture = ''
+        let teamPicture = participant.teamPicture
 
         try {
-            setIsJoining(true)
-            teamPicture = await uploadTeamPicture(image)
-            await joinHackathon({ ...values, teamPicture })
-
-            form.reset()
-
-            const swalResult = await Swal.fire({
-                title: 'Hooray!',
-                html: "You have successfully joined this hackathon. Don't forget to <a href='/submit' class='underline'>submit</a> your project before the deadline ends.",
-                confirmButtonText: 'Got it',
-                ...sweetAlertConfigNoCancel,
-            })
-
-            setIsParticipant(true)
-
-            if (swalResult.isConfirmed) {
-                router.push('/')
+            setIsEditing(true)
+            // new team picture
+            if (imageRef?.current?.files?.length) {
+                const image = imageRef.current.files[0]
+                teamPicture = await uploadTeamPicture(image)
             }
+
+            await editTeam({ ...values, teamPicture })
+
+            toast.success('Successfully edited team details!')
+            form.reset()
+            onClose(values.teamName, teamPicture, values.members)
         } catch (error) {
-            await deleteFromURL(teamPicture)
             toastError(error)
         } finally {
-            setIsJoining(false)
+            setIsEditing(false)
         }
-    }
-
-    function onSubmit(values: z.infer<typeof JoinFormSchema>) {
-        Swal.fire({
-            title: 'Confirm details',
-            text: 'This team will be tied to your Google account. To join with a different team, you need to use another Google account.',
-            showCancelButton: true,
-            showConfirmButton: true,
-            confirmButtonText: 'Confirm',
-            ...sweetAlertConfig,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                join(values)
-            }
-        })
     }
 
     useEffect(() => {
@@ -160,7 +140,7 @@ function JoinForm() {
     }
 
     return (
-        <div className="mx-auto flex h-full w-full flex-col items-center justify-center rounded-md border-2 px-5 py-10  lg:min-w-[60%] lg:max-w-[500px]">
+        <div className="-z-20">
             <Form {...form}>
                 <form
                     className="space-y-8"
@@ -199,17 +179,18 @@ function JoinForm() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Team picture</FormLabel>
-                                <img
-                                    alt="team"
-                                    src=""
-                                    width={100}
-                                    height={100}
-                                    className={twMerge(
-                                        'h-[100px] w-[100px] rounded-full object-cover',
-                                        !field.value && 'hidden'
-                                    )}
-                                    ref={imageDisplayRef}
-                                />
+                                {participant?.teamPicture ? (
+                                    <img
+                                        alt="team"
+                                        src={participant.teamPicture}
+                                        width={100}
+                                        height={100}
+                                        className="h-[100px] w-[100px] rounded-full object-cover"
+                                        ref={imageDisplayRef}
+                                    />
+                                ) : (
+                                    <Skeleton className="h-[100px] w-[100px] rounded-full" />
+                                )}
 
                                 <FormControl>
                                     <>
@@ -220,6 +201,7 @@ function JoinForm() {
                                             ref={imageRef}
                                             id="img"
                                             className="hidden"
+                                            required={false}
                                             onChangeCapture={(event) => {
                                                 if (imageDisplayRef?.current) {
                                                     if (
@@ -241,14 +223,13 @@ function JoinForm() {
                                             htmlFor="img"
                                             className="flex h-10 w-full items-center rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
                                         >
-                                            {field.value
-                                                ? 'Choose another image'
-                                                : 'Choose file'}
+                                            Choose another image
                                         </label>
                                     </>
                                 </FormControl>
                                 <FormDescription>
-                                    This will be your public team picture.
+                                    Upload another image to edit your current
+                                    team picture
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
@@ -318,13 +299,13 @@ function JoinForm() {
                     <div className="flex justify-center">
                         <Button
                             type="submit"
-                            className="w-[150px]"
+                            className="w-[100px]"
                             disabled={disabled}
                         >
-                            {isUploading || isJoining ? (
+                            {isUploading || isEditing ? (
                                 <Loader2 className="animate-spin" />
                             ) : (
-                                'Join Hackathon'
+                                'Save'
                             )}
                         </Button>
                     </div>
@@ -336,23 +317,8 @@ function JoinForm() {
                     <Progress value={progress} />
                 </div>
             )}
-
-            {isWithinDeadline && isParticipant && (
-                <div className="mt-3 w-full text-center text-xs text-gray-400">
-                    <p>You have already joined this hackathon.</p>
-                    <Link href="/submit" className="underline">
-                        Submit a project instead?
-                    </Link>
-                </div>
-            )}
-
-            {!isWithinDeadline && (
-                <div className="mt-3 w-full text-center text-xs text-gray-400">
-                    <p>This hackathon is not accepting participants anymore.</p>
-                </div>
-            )}
         </div>
     )
 }
 
-export default JoinForm
+export default EditTeamForm

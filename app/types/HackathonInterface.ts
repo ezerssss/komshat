@@ -15,7 +15,7 @@ export const HackathonSchema = ThemeSchema.extend({
     dateEnd: z.instanceof(Timestamp),
     dateSubmissionEnd: z.instanceof(Timestamp),
     dateVotingEnd: z.instanceof(Timestamp),
-    winningProjectID: z.string().uuid().nullable(),
+    winningProjectID: z.string().nullable(),
 })
 
 export type HackathonInterface = z.infer<typeof HackathonSchema>

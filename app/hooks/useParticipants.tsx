@@ -10,7 +10,7 @@ const participantsCollectionsRef = collection(db, 'participants')
 const projectsCollectionRef = collection(db, 'projects')
 
 function useParticipants(hackathonID: string = '') {
-    const { hackathon } = useHackathon(hackathonID)
+    const { hackathon, isWithinDeadline } = useHackathon(hackathonID)
 
     const [participants, setParticipants] = useState<ParticipantInterface[]>([])
     const [isParticipantsLoading, setIsParticipantsLoading] = useState(true)
@@ -109,6 +109,7 @@ function useParticipants(hackathonID: string = '') {
         isProjectsLoading,
         winningProjectID: hackathon?.winningProjectID,
         winningCaptainID,
+        isWithinDeadline,
     }
 }
 

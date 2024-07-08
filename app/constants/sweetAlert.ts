@@ -1,6 +1,6 @@
 const sweetAlertConfig: any = {
     customClass: {
-        popup: 'border border-slate-200 bg-white p-6 shadow-lg sm:rounded-lg',
+        popup: 'border border-slate-200 bg-white p-6 shadow-lg sm:rounded-lg z-100',
         title: 'flex flex-col space-y-2 text-center sm:text-left text-lg font-semibold',
         htmlContainer: 'duration-200 sweet-alert-content',
         confirmButton: 'sweet-alert-button',

@@ -116,3 +116,9 @@ export function sanitizeString(string: string): string {
 
     return censor.applyTo(string, matches)
 }
+
+export function isFirebaseImage(image: string): boolean {
+    return image.startsWith(
+        'https://firebasestorage.googleapis.com/v0/b/komshat-3be71.appspot.com'
+    )
+}

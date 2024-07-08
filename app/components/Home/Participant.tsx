@@ -1,25 +1,66 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { ParticipantInterface } from '@/app/types/ParticipantInterface'
 import { joinMembersToString, sanitizeString } from '@/lib/utils'
-import { Crown } from 'lucide-react'
+import { Crown, Pencil } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
+import useUser from '@/app/hooks/useUser'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog'
+import EditTeamForm from '../Join/EditTeamForm'
+import { useState } from 'react'
 
 interface PropsInterface extends ParticipantInterface {
     winningCaptainID: string | null
+    isWithinDeadline: boolean
 }
 
 export function Participant(props: PropsInterface) {
-    const { teamName, teamPicture, members, captainID, winningCaptainID } =
-        props
+    const user = useUser()
 
-    let teamNameSanitized = sanitizeString(teamName.replace('Team', ''))
+    const {
+        teamName: teamNameProps,
+        teamPicture: teamPictureProps,
+        members: membersProps,
+        captainID,
+        winningCaptainID,
+        isWithinDeadline,
+    } = props
+
+    const [teamName, setTeamName] = useState(teamNameProps)
+    const [teamPicture, setTeamPicture] = useState(teamPictureProps)
+    const [members, setMembers] = useState(membersProps)
+
+    let teamNameSanitized = sanitizeString(teamName)
     const isWinner = captainID === winningCaptainID
+    const isOwnTeam = captainID === user?.uid
+
+    const [isEditOpen, setIsEditOpen] = useState(false)
+
+    function handleClose(
+        teamName: string,
+        teamPicture: string,
+        members: { name: string }[]
+    ) {
+        setIsEditOpen(false)
+
+        setTeamName(teamName)
+        setTeamPicture(teamPicture)
+        setMembers(members)
+    }
 
     return (
         <Popover>
@@ -30,8 +71,34 @@ export function Participant(props: PropsInterface) {
                         isWinner && 'cursor-pointer border-[#ffbb48]'
                     )}
                 >
+                    {isOwnTeam && isWithinDeadline && (
+                        <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+                            <DialogTrigger asChild>
+                                <button>
+                                    <Pencil
+                                        className="absolute right-3 top-3"
+                                        size={15}
+                                    />
+                                </button>
+                            </DialogTrigger>
+                            <DialogContent className="max-h-[95%] overflow-y-auto">
+                                <DialogHeader>
+                                    <DialogTitle>Edit Team details</DialogTitle>
+                                    <DialogDescription>
+                                        Edit Team details here. Click save when
+                                        you&apos;re done.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <EditTeamForm onClose={handleClose} />
+                            </DialogContent>
+                        </Dialog>
+                    )}
+
                     <Avatar>
-                        <AvatarImage src={teamPicture} />
+                        <AvatarImage
+                            className="object-cover"
+                            src={teamPicture}
+                        />
                         <AvatarFallback>{teamNameSanitized[0]}</AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">

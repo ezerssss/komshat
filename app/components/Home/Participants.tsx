@@ -18,6 +18,7 @@ function Participants(props: PropsInterface) {
         isProjectsLoading,
         winningProjectID,
         winningCaptainID,
+        isWithinDeadline,
     } = useParticipants(props.hackathonID)
 
     return (
@@ -32,6 +33,7 @@ function Participants(props: PropsInterface) {
                     <Participant
                         key={participant.captainID}
                         winningCaptainID={winningCaptainID}
+                        isWithinDeadline={isWithinDeadline}
                         {...participant}
                     />
                 ))}
