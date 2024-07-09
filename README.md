@@ -10,7 +10,7 @@
 ## Tech Stack
 
 -   **Frontend**: Next.js, Tailwind CSS, `shadcn/ui` components.
--   **Backend**: Firebase Cloud Functions, Firestore for database operations, Google Cloud Sheduler for Cron jobs, Google Cloud Tasks Services.
+-   **Backend**: Firebase Cloud Functions, Firestore for database operations, Google Cloud Scheduler for Cron jobs, Google Cloud Tasks Services.
 -   **Authentication**: Firebase Authentication for secure user management.
 -   **Storage**: Firebase Storage for managing project uploads.
 -   **AI Integration**: OpenAI API for theme generation.
