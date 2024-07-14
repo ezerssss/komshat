@@ -29,6 +29,12 @@ function HackathonConfig() {
     const [isConfigSaving, setIsConfigSaving] = useState(false)
 
     useEffect(() => {
+        if (hackathonConfig?.startHour) {
+            setStartHour(hackathonConfig.startHour)
+        }
+    }, [hackathonConfig?.startHour])
+
+    useEffect(() => {
         if (hackathonConfig?.startDay) {
             setStartDay(hackathonConfig.startDay)
         }
