@@ -29,26 +29,14 @@ function HackathonConfig() {
     const [isConfigSaving, setIsConfigSaving] = useState(false)
 
     useEffect(() => {
-        if (hackathonConfig?.startHour) {
-            setStartHour(hackathonConfig.startHour)
-        }
-    }, [hackathonConfig?.startHour])
+        setAutoGenerateTheme(!!hackathonConfig?.autoGenerateTheme)
+        setStartDay(hackathonConfig?.startDay ?? 5)
+        setStartHour(hackathonConfig?.startHour ?? 5)
 
-    useEffect(() => {
-        if (hackathonConfig?.startDay) {
-            setStartDay(hackathonConfig.startDay)
-        }
-    }, [hackathonConfig?.startDay])
-
-    useEffect(() => {
         if (hackathonConfig?.durationInDays) {
             setDuration(hackathonConfig.durationInDays)
         }
-    }, [hackathonConfig?.durationInDays])
-
-    useEffect(() => {
-        setAutoGenerateTheme(!!hackathonConfig?.autoGenerateTheme)
-    }, [hackathonConfig?.autoGenerateTheme])
+    }, [hackathonConfig])
 
     async function handleConfig() {
         try {
