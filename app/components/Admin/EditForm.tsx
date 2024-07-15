@@ -345,7 +345,7 @@ function EditForm(props: HackathonInterface) {
                         <FormItem>
                             <FormLabel>Theme</FormLabel>
                             <Button
-                                disabled={isGettingTheme}
+                                disabled={isGettingTheme || isLoading}
                                 onClick={handleAutoGenerate}
                                 size="sm"
                                 className="mb-4 block px-2 py-1"
