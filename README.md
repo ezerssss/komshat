@@ -22,4 +22,4 @@ Typescript · Next.js · Firebase
 
 ## Notes
 
-- One of the projects that taught me a lot about GCP and Firebase. I learned and implemented GCP job queues (task queues), Firebase functions, and many other cloud tech :).
+- One of the projects that taught me a lot about GCP and Firebase. I learned and implemented GCP job queues (task queues), Firebase functions, and many other cloud tech.
